@@ -1,0 +1,131 @@
+﻿@page
+@using eBordo.Helper
+@using Data.EntityModels
+@model IndexModel
+@{
+    ViewData["Title"] = "Upravljanje profilom";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    string poruka = (string)TempData["porukaInfo"];
+    string konfMail = (string)TempData["mailInfo"];
+    Korisnik k = Autentifikacija.LogiraniKorisnik(HttpContext);
+}
+
+<h4 style="margin-bottom:25px;">@ViewData["Title"]</h4>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+
+<span hidden id="poruka">@poruka</span>
+<span hidden id="mail">@konfMail</span>
+
+
+<form id="profile-form" method="post">
+    @if (k.isAdmin)
+    {
+    <div class="row">
+        <div class="col-4">
+            <label>E-mail adresa</label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                </div>
+                <input type="text" asp-for="Input.emailAdresa" class="form-control" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-4">
+            <label>Telefon</label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone" aria-hidden="true"></i></span>
+                </div>
+                <input asp-for="Input.telefon" type="text" class="form-control"><br>
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-4">
+                <label>Ime</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-id-card" aria-hidden="true"></i></span>
+                    </div>
+                    <input readonly type="text" asp-for="Input.ime" class="form-control" aria-describedby="basic-addon1">
+                </div>
+
+                <label>Državljanstvo</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-flag" aria-hidden="true"></i></span>
+                    </div>
+                    <input readonly class="form-control" asp-for="Input.drzavljanstvo" /><br>
+                </div>
+
+                <label>Grad rođenja</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    </div>
+                    <input readonly class="form-control" asp-for="Input.gradRodjenja" asp-items="Model.gradovi" /><br>
+                </div>
+
+                <label>Adresa prebivališta</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    </div>
+                    <input readonly asp-for="Input.adresaPrebivalista" type="text" class="form-control"><br>
+                </div>
+            </div>
+            <div class="col-4">
+                <label>Prezime</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-id-card" aria-hidden="true"></i></span>
+                    </div>
+                    <input readonly type="text" asp-for="Input.prezime" class="form-control" aria-describedby="basic-addon1">
+                </div>
+                <label>Datum rođenja</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                    </div>
+                    <input readonly asp-for="Input.datumRodjenja" type="date" class="form-control"><br>
+                </div>
+                <label>E-mail adresa</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                    </div>
+                    <input type="text" asp-for="Input.emailAdresa" class="form-control" aria-describedby="basic-addon1">
+                </div>
+                <label>Telefon</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone" aria-hidden="true"></i></span>
+                    </div>
+                    <input asp-for="Input.telefon" type="text" class="form-control"><br>
+                </div>
+            </div>
+        </div>
+    }
+    <button id="update-profile-button" type="submit" class="btn btn-warning">Spasi izmjene</button>
+</form>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+        var poruka = document.getElementById("poruka").innerText;
+        var mail = document.getElementById("mail").innerText;
+        notifikacija(poruka);
+        notifikacija(mail);
+    });
+
+</script>

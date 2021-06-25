@@ -1,0 +1,1103 @@
+﻿@using eBordo.ViewModels.Utakmica
+@model UtakmicaDodajVM
+
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+
+<style>
+    #slikaWatermark {
+        position: absolute;
+        height: 650px;
+        opacity: 0.1;
+        margin-left: 19%;
+        margin-top: 10%;
+    }
+    #dresovi {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 160px;
+    }
+    #opis {
+        text-align: center;
+    }
+    #terenSlika {
+        width: 102%;
+        height: 100%;
+    }
+
+    #spanStyle {
+        background-color: maroon;
+        color: white;
+        font-size: 12px;
+    }
+
+    #terenDiv {
+        position: absolute;
+        bottom: 0px;
+        width: 93.5%;
+        height: 100%;
+    }
+
+    .dres {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 70px;
+        filter: drop-shadow(0 0 0.15rem black);
+    }
+    
+    #opis {
+        text-align: center;
+    }
+
+    #linijaGolman {
+        padding-top: 10px;
+    }
+
+    #linijaOdbrana {
+        padding-top: 5px;
+    }
+
+    #vezniRed {
+        padding-top: 10px;
+    }
+
+    #krila {
+        padding-top: 10px;
+    }
+
+    #napadaci {
+        padding-top: 5px;
+    }
+    .selectDI {
+        padding: 0px;
+        height: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 90px;
+    }
+    #opisSelect{
+        color:maroon;
+    }
+    #opisLinije{
+        font-size:18px;
+        color:maroon;
+    }
+    #trener {
+        font-size: 18px;
+        color: maroon;
+        font-weight:bold;
+    }
+    #nazivPozicije {
+        font-size: 16px;
+    }
+    #bOpis {
+        font-size: 16px;
+    }
+    #DownUp{
+        float:right;
+    }
+</style>
+
+<div class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <img id="slikaWatermark" src="~/sarajevo.png" />
+            <form asp-action="SnimiDodaj" asp-controller="Utakmica" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h4 class="modal-title">Dodaj utakmicu</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <input type="hidden" readonly asp-for="utakmicaID" />
+
+                                    <label style="margin-top:8px;">Protivnik</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                        </div>
+                                        <select class="form-control" asp-for="protivnikID" asp-items="Model.klubovi" required></select><br>
+                                    </div>
+                                    <label>Stadion</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                                        </div>
+                                        <select class="form-control" asp-for="stadionID" asp-items="Model.stadioni" required></select><br>
+                                    </div>
+
+                                    <label>Datum odigravanja</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                        </div>
+                                    <input asp-for="datumOdigravanja" type="date" class="form-control" required><br>
+                                    </div>
+
+                                </div>
+                                <div class="col">
+                                    <label style="margin-bottom: 3px;">Tip utakmice</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipUtakmice" id="tipUtakmice1" value="domaća">
+                                        <label class="form-check-label" for="tipUtakmice">
+                                            Domaća
+                                        </label><br />
+                                        <input class="form-check-input" type="radio" name="tipUtakmice" id="tipUtakmice2" value="gostujuća">
+                                        <label class="form-check-label" for="tipUtakmice">
+                                            Gostujuća
+                                        </label>
+                                    </div><br />
+
+                                    <label>Takmičenje</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-flag" aria-hidden="true"></i></span>
+                                        </div>
+                                        <select class="form-control" asp-for="takmicenjeID" asp-items="Model.takmicenja" required></select><br>
+                                    </div>
+
+                                    <label>Satnica</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-clock-o" aria-hidden="true"></i></span>
+                                        </div>
+                                    <input asp-for="satnica" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Kapiten</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-star" aria-hidden="true"></i></span>
+                                        </div>
+                                    <select class="form-control" asp-for="kapitenID" asp-items="Model.igraci" required></select><br>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>Trener</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-address-card-o" aria-hidden="true"></i></span>
+                                        </div>
+                                    <select id="trenerSelect" onclick="promjeniTrener()" class="form-control" asp-for="trenerID" asp-items="Model.treneri" required></select><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <span>Garniture dresova</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <img id="dresovi" src="~/domaci.png" />
+                                </div>
+                                <div class="col">
+                                    <img id="dresovi" src="~/gostujuci.png" />
+                                </div>
+                            </div>
+                            <div style="margin-top:10px;" class="row">
+                                <div id="opis" class="col">
+                                    <input onclick="promjeniDomaca()" class="form-check-input" type="radio" name="garnituraDresova" id="garnituraDresova1" value="domaća">
+                                    <label class="form-check-label" for="garnituraDresova">
+                                        Domaća
+                                    </label>
+                                </div>
+                                <div id="opis" class="col">
+                                    <input onclick="promjeniGostujuca()" class="form-check-input" type="radio" name="garnituraDresova" id="garnituraDresova2" value="gostujuća">
+                                    <label class="form-check-label" for="garnituraDresova">
+                                        Gostujuća
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="margin-top:10px;" class="row">
+                                <div class="col">
+                                    <div class="form-group purple-border">
+                                        <label for="exampleFormControlTextarea4">Napomene</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+                                            </div>
+                                        <textarea asp-for="napomene" class="form-control" id="exampleFormControlTextarea4" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Sudija</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                        </div>
+                                    <input asp-for="sudija" type="text" class="form-control" required><br />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>Vrijeme</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-sun-o" aria-hidden="true"></i></span>
+                                        </div>
+                                    <select class="form-control" asp-for="nazivVremena" asp-items="Model.vrijeme" required></select><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Broj ulaznica</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-hashtag" aria-hidden="true"></i></span>
+                                        </div>
+                                    <input asp-for="brojUlaznica" type="number" class="form-control" required><br />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>Cijena ulaznice</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                        </div>
+                                    <input asp-for="cijenaulaznice" type="number" class="form-control" required><br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr style="margin-top:0px;" />
+                    <div class="row" style="margin-bottom:6px;">
+                        <div class="col">
+                            <h5 style="color:maroon">Detaljne ocjene igrača</h5>
+                        </div>
+                        <div class="col">
+                            <button style="float:right;" id="btnCollapseDown" type="button" class="btn btn-outline-warning btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_down</span></button>
+                            <button style="float:right;" id="btnCollapseUp" type="button" class="btn btn-outline-danger btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_up</span></button>
+                        </div>
+                    </div>
+                    <div class="collapse">
+                        <div id="getDetalji"></div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col">
+                            <img id="terenSlika" src="~/pitch.png" />
+                            <div id="terenDiv">
+                                <div id="napadaci">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        @*NAPADAC*@
+                                        <div id="opis" class="col">
+                                            <select id="napadac" onchange="promjeniNapadac()" class="selectDI" asp-for="napadacID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Napadač</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="napadacPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="krila">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        @* LIJEVO KRILO *@
+                                        <div id="opis" class="col">
+                                            <select id="lijevoKrilo" onchange="promjeniLijevoKrilo()" class="selectDI" asp-for="lijevoKriloID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Lijevo krilo</option>
+                                            </select>
+                                        </div>
+                                        @* PREDNJI VEZNI *@
+                                        <div id="opis" class="col">
+                                            <select id="prednjiVezni" onchange="promjeniPrednjiVezni()" class="selectDI" asp-for="prednjiVezniID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Prednji vezni</option>
+                                            </select>
+                                        </div>
+                                        @* DESNO KRILO *@
+                                        <div id="opis" class="col">
+                                            <select id="desnoKrilo" onchange="promjeniDesnoKrilo()" class="selectDI" asp-for="desnoKriloID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Desno krilo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="lijevoKriloPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="prednjiVezniPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="desnoKriloPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="vezniRed">
+                                    <div class="row">
+                                        <div class="col">
+
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div id="opis" class="col">
+
+                                        </div>
+                                        @* PRVI ZADNJI VEZNI *@
+                                        <div style="padding-left:0px;" id="opis" class="col">
+                                            <select id="prviZadnjiVezni" onchange="promjeniPrviZadnjiVezni()" class="selectDI" asp-for="prviZadnjiVezniID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Zadnji vezni</option>
+                                            </select>
+                                        </div>
+                                        @* DRUGI ZADNJI VEZNI *@
+                                        <div style="padding-left:0px;margin-left:20px;" id="opis" class="col">
+                                            <select id="drugiZadnjiVezni" onchange="promjeniDrugiZadnjiVezni()" class="selectDI" asp-for="drugiZadnjiVezniID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Zadnji vezni</option>
+                                            </select>
+                                        </div>
+                                        <div id="opis" class="col">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col">
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="prviZadnjiVezniPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="drugiZadnjiVezniPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                    </div>
+                                </div>
+                                <div id="linijaOdbrana">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-right: 6px;">
+                                        @*LIJEVI BEK*@
+                                        <div id="opis" class="col">
+                                            <select id="lijeviBek" onchange="promjeniLijeviBek()" class="selectDI" asp-for="lijeviBekID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Lijevi bek</option>
+                                            </select>
+                                        </div>
+                                        @*PRVI STOPER*@
+                                        <div id="opis" class="col">
+                                            <select id="prviStoper" onchange="promjeniPrviStoper()" class="selectDI" asp-for="prviStoperID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Stoper</option>
+                                            </select>
+                                        </div>
+                                        @*DRUGI STOPER*@
+                                        <div id="opis" class="col">
+                                            <select id="drugiStoper" onchange="promjeniDrugiStoper()" class="selectDI" asp-for="drugiStoperID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Stoper</option>
+                                            </select>
+                                        </div>
+                                        @*DESNI BEK*@
+                                        <div id="opis" class="col">
+                                            <select id="desniBek" onchange="promjeniDesniBek()" class="selectDI" asp-for="desniBekID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Desni bek</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px;">
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="lijeviBekPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="prviStoperPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="drugiStoperPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:80px;">
+                                                <div id="desniBekPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="linijaGolman">
+                                    <div class="row">
+                                        <div class="col">
+                                            <img name="dresovi1" class="dres" src="~/domaci.png">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        @*GOLMAN*@
+                                        <div id="opis" class="col">
+                                            <select id="golman" class="selectDI" onchange="promjeniGolman()" asp-for="golmanID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                                <option id="opisSelect">Golman</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:5px;">
+                                        <div class="container d-flex justify-content-center">
+                                            <div class="progress" style="width:60px;">
+                                                <div id="golmanPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <b style="color:maroon;font-size:20px;text-decoration:underline">Prvih 11</b><br />
+                                    <span id="opisLinije">Golman</span><br />
+                                    <span id="opisPozicije">Golman: </span> <b class="bOpis" id="golmanB"></b><br />
+                                    <span id="opisLinije">Zadnja linija</span><br />
+                                    <span id="opisPozicije">Lijevi bek: </span> <b class="bOpis" id="lijeviBekB"></b><br />
+                                    <span id="opisPozicije">Štoper: </span> <b class="bOpis" id="stoperPrviB"></b><br />
+                                    <span id="opisPozicije">Štoper: </span> <b class="bOpis" id="stoperDrugiB"></b><br />
+                                    <span id="opisPozicije">Desni bek: </span> <b class="bOpis" id="desniBekB"></b><br />
+                                    <span id="opisLinije">Vezna linija</span><br />
+                                    <span id="opisPozicije">Zadnji vezni: </span> <b class="bOpis" id="zadnjiVezniPrviB"></b><br />
+                                    <span id="opisPozicije">Zadnji vezni: </span> <b class="bOpis" id="zadnjiVezniDrugiB"></b><br />
+                                    <span id="opisPozicije">Prednji vezni: </span> <b class="bOpis" id="prednjiVezniB"></b><br />
+                                    <span id="opisLinije">Napad</span><br />
+                                    <span id="opisPozicije">Lijevo krilo: </span> <b class="bOpis" id="lijevoKriloB"></b><br />
+                                    <span id="opisPozicije">Desno krilo </span> <b class="bOpis" id="desnoKriloB"></b><br />
+                                    <span id="opisPozicije">Napadač: </span> <b class="bOpis" id="napadacB"></b><br />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:8px;">
+                                <div class="col">
+                                    <b style="color:maroon;font-size:20px;text-decoration:underline">Klupa</b><br />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <span id="opisPozicije">Golman: </span> <b class="bOpis" id="klubaGolmanB"></b><br />
+                                    <span id="opisPozicije">Odbrana: </span> <b class="bOpis" id="klubaOdbranaB"></b><br />
+                                    <span id="opisPozicije">Bek: </span> <b class="bOpis" id="klubaBekB"></b><br />
+                                    <span id="opisPozicije">Veznjak: </span> <b class="bOpis" id="klubaVeznjakB"></b><br />
+                                    <span id="opisPozicije">Krilo: </span> <b class="bOpis" id="klubaKriloB"></b><br />
+                                    <span id="opisPozicije">Napadač: </span> <b class="bOpis" id="klubaNapadacB"></b><br />
+                                    <hr />
+                                    <span id="opisLinije">Trener: </span><span id="trener">Trener</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align:center;margin-top:20px;">
+                        <b style="color:maroon;font-size:20px;text-decoration:underline">Klupa</b><br />
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row" style="margin-bottom:5px;">
+                                <div class="col">
+                                    <img name="dresovi1" class="dres" src="~/domaci.png">
+                                    <div id="opis" class="col">
+                                        <select id="golmanKlupa" class="selectDI" onchange="promjeniGolmanKlupa()" asp-for="golmanKlupaID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                            <option id="opisSelect">Golman (Klupa)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <img name="dresovi1" class="dres" src="~/domaci.png">
+                                    <div id="opis" class="col">
+                                        <select id="odbranaKlupa" class="selectDI" onchange="promjeniOdbranaKlupa()" asp-for="odbranaKlupaID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                            <option id="opisSelect">Odbrana (Klupa)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <img name="dresovi1" class="dres" src="~/domaci.png">
+                                    <div id="opis" class="col">
+                                        <select id="bekKlupa" class="selectDI" onchange="promjeniBekKlupa()" asp-for="bekKlupaID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                            <option id="opisSelect">Bek (Klupa)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <img name="dresovi1" class="dres" src="~/domaci.png">
+                                    <div id="opis" class="col">
+                                        <select id="veznjakKlupa" class="selectDI" onchange="promjeniVeznjakKlupa()" asp-for="veznjakKlupaID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                            <option id="opisSelect">Veznjak (Klupa)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <img name="dresovi1" class="dres" src="~/domaci.png">
+                                    <div id="opis" class="col">
+                                        <select id="kriloKlupa" class="selectDI" onchange="promjeniKriloKlupa()" asp-for="kriloKlupaID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                            <option id="opisSelect">Krilo (Klupa)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <img name="dresovi1" class="dres" src="~/domaci.png">
+                                    <div id="opis" class="col">
+                                        <select id="napadacKlupa" class="selectDI" onchange="promjeniNapadacKlupa()" asp-for="napadacKlupaID" asp-items="Model.igraci" class="form-control form-control-sm">
+                                            <option id="opisSelect">Napadač (Klupa)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="golmanKlupaPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="odbranaKlupaPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="bekKlupaPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="veznjakKlupaPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="kriloKlupaPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="container d-flex justify-content-center">
+                                        <div class="progress" style="width:60px;">
+                                            <div id="napadacKlupaPB" style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span id="btnIkona"><i class="fa fa-remove"></i></span>Poništi akciju
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <span id="btnIkona"><i class="fa fa-check"></i></span>Dodaj utakmicu
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var pozvaniIgraci = ["golman", "lijeviBek", "prviStoper", "drugiStoper", "desniBek", "prviZadnjiVezni", "drugiZadnjiVezni", "prednjiVezni", "lijevoKrilo", "desnoKrilo", "napadac", "golmanKlupa", "odbranaKlupa", "bekKlupa", "veznjakKlupa", "kriloKlupa", "napadacKlupa"];
+    function provjera(imePrezime) {
+        for (var i = 0; i < pozvaniIgraci.length; i++) {
+            if (pozvaniIgraci[i] === imePrezime) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+    function promjeniTrener() {
+        var e = document.getElementById("trenerSelect");
+        var result = e.options[e.selectedIndex].text;
+        $("#trener").html(result);
+    }
+    function promjeniNapadacKlupa() {
+        $(document).ready(function () {
+            var e = document.getElementById("napadacKlupa");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#klubaNapadacB").empty();
+            $("#klubaNapadacB").append(result);
+            var trenutni = pozvaniIgraci[16];
+            pozvaniIgraci[16] = pozvaniIgraci[16].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "napadacKlupaPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniKriloKlupa() {
+        $(document).ready(function () {
+            var e = document.getElementById("kriloKlupa");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#klubaKriloB").empty();
+            $("#klubaKriloB").append(result);
+            var trenutni = pozvaniIgraci[15];
+            pozvaniIgraci[15] = pozvaniIgraci[15].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "kriloKlupaPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniVeznjakKlupa() {
+        $(document).ready(function () {
+            var e = document.getElementById("veznjakKlupa");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#klubaVeznjakB").empty();
+            $("#klubaVeznjakB").append(result);
+            var trenutni = pozvaniIgraci[14];
+            pozvaniIgraci[14] = pozvaniIgraci[14].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "veznjakKlupaPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniBekKlupa() {
+        $(document).ready(function () {
+            var e = document.getElementById("bekKlupa");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#klubaBekB").empty();
+            $("#klubaBekB").append(result);
+            var trenutni = pozvaniIgraci[13];
+            pozvaniIgraci[13] = pozvaniIgraci[13].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "bekKlupaPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniOdbranaKlupa() {
+        $(document).ready(function () {
+            var e = document.getElementById("odbranaKlupa");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#klubaOdbranaB").empty();
+            $("#klubaOdbranaB").append(result);
+            var trenutni = pozvaniIgraci[12];
+            pozvaniIgraci[12] = pozvaniIgraci[12].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "odbranaKlupaPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniGolmanKlupa() {
+        $(document).ready(function () {
+            var e = document.getElementById("golmanKlupa");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#klubaGolmanB").empty();
+            $("#klubaGolmanB").append(result);
+            var trenutni = pozvaniIgraci[11];
+            pozvaniIgraci[11] = pozvaniIgraci[11].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "golmanKlupaPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniNapadac() {
+        $(document).ready(function () {
+            var e = document.getElementById("napadac");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#napadacB").empty();
+            $("#napadacB").append(result);
+            var trenutni = pozvaniIgraci[10];
+            pozvaniIgraci[10] = pozvaniIgraci[10].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "napadacPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniPrednjiVezni() {
+        $(document).ready(function () {
+            var e = document.getElementById("prednjiVezni");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#prednjiVezniB").empty();
+            $("#prednjiVezniB").append(result);
+            var trenutni = pozvaniIgraci[9];
+            pozvaniIgraci[9] = pozvaniIgraci[9].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "prednjiVezniPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniDesnoKrilo() {
+        $(document).ready(function () {
+            var e = document.getElementById("desnoKrilo");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#desnoKriloB").empty();
+            $("#desnoKriloB").append(result);
+            var trenutni = pozvaniIgraci[8];
+            pozvaniIgraci[8] = pozvaniIgraci[8].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "desnoKriloPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniLijevoKrilo() {
+        $(document).ready(function () {
+            var e = document.getElementById("lijevoKrilo");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#lijevoKriloB").empty();
+            $("#lijevoKriloB").append(result);
+            var trenutni = pozvaniIgraci[7];
+            pozvaniIgraci[7] = pozvaniIgraci[7].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "lijevoKriloPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniDrugiZadnjiVezni() {
+        $(document).ready(function () {
+            var e = document.getElementById("drugiZadnjiVezni");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#zadnjiVezniDrugiB").empty();
+            $("#zadnjiVezniDrugiB").append(result);
+            var trenutni = pozvaniIgraci[6];
+            pozvaniIgraci[6] = pozvaniIgraci[6].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "drugiZadnjiVezniPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniPrviZadnjiVezni() {
+        $(document).ready(function () {
+            var e = document.getElementById("prviZadnjiVezni");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#zadnjiVezniPrviB").empty();
+            $("#zadnjiVezniPrviB").append(result);
+            var trenutni = pozvaniIgraci[5];
+            pozvaniIgraci[5] = pozvaniIgraci[5].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "prviZadnjiVezniPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniDesniBek() {
+        $(document).ready(function () {
+            var e = document.getElementById("desniBek");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#desniBekB").empty();
+            $("#desniBekB").append(result);
+            var trenutni = pozvaniIgraci[4];
+            pozvaniIgraci[4] = pozvaniIgraci[4].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "desniBekPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniPrviStoper() {
+        $(document).ready(function () {
+            var e = document.getElementById("prviStoper");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#stoperPrviB").empty();
+            $("#stoperPrviB").append(result);
+            var trenutni = pozvaniIgraci[3];
+            pozvaniIgraci[3] = pozvaniIgraci[3].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "prviStoperPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniDrugiStoper() {
+        $(document).ready(function () {
+            var e = document.getElementById("drugiStoper");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#stoperDrugiB").empty();
+            $("#stoperDrugiB").append(result);
+            var trenutni = pozvaniIgraci[2];
+            pozvaniIgraci[2] = pozvaniIgraci[2].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "drugiStoperPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniLijeviBek() {
+        $(document).ready(function () {
+            var e = document.getElementById("lijeviBek");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#lijeviBekB").empty();
+            $("#lijeviBekB").append(result);
+            var trenutni = pozvaniIgraci[1];
+            pozvaniIgraci[1] = pozvaniIgraci[1].replace(trenutni, result);
+            //-------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "lijeviBekPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function promjeniGolman() {
+        $(document).ready(function () {
+            var e = document.getElementById("golman");
+            var result = e.options[e.selectedIndex].text;
+            if (provjera(result) == 0) {
+                notifikacija("Igrač već dodan!");
+                e.selectedIndex = 0;
+                return;
+            }
+            $("#golmanB").empty();
+            $("#golmanB").append(result);
+            var trenutni = pozvaniIgraci[0];
+            pozvaniIgraci[0] = pozvaniIgraci[0].replace(trenutni, result);
+            //-----------------------------------------------------------------------
+            igracID = e.options[e.selectedIndex].value;
+            elementID = "golmanPB";
+            generisiProgressBar(igracID, elementID);
+            getDetalji(igracID);
+        });
+    }
+    function generisiProgressBar(igracID, elementID) {
+        var progressBar = document.getElementById(elementID);
+        var ocjena = getOcjena(igracID);
+        var variable = parseFloat(ocjena) * 10;
+        var ocjenaText = ocjena;
+        $(progressBar).html(ocjenaText);
+        var unit = "%";
+        var z = variable + unit;
+        $("#" + elementID).css("width", z);
+        var vrijednost = parseFloat(ocjena);
+        if (vrijednost >= 3 && vrijednost < 8) {
+            progressBar.style.backgroundColor = "#FFC107";
+        }
+        else if (vrijednost >= 8 && vrijednost <= 10) {
+            progressBar.style.backgroundColor = "#28A745";
+        }
+        else {
+            progressBar.style.backgroundColor = "#DC3545";
+        }
+    }
+    function getOcjena(igracID) {
+        var url = "/Utakmica/getOcjena?igracID=" + igracID;
+        var ocjena = $.ajax({
+            type: 'POST',
+            url: url,
+            dataType: 'text',
+            async: false,
+            success: function (data) {
+                return data;
+            }
+        }).responseText;
+
+        return ocjena;
+    }
+    function getDetalji(igraciID) {
+        var url = "/Igrac/getDetalji?igracID=" + igraciID;;
+        $.get(url, function (d) {
+            $("#getDetalji").html(d);
+        });
+    }
+    function promjeniGostujuca() {
+        var dresovi = document.getElementsByName("dresovi1");
+        for (var i = 0; i < dresovi.length; i++) {
+            dresovi[i].src = "https://i.postimg.cc/1Xr9k2dq/gostujuci.png"
+        }
+    }
+    function promjeniDomaca() {
+        var dresovi = document.getElementsByName("dresovi1");
+        for (var i = 0; i < dresovi.length; i++) {
+            dresovi[i].src = "https://i.postimg.cc/Nf2DxtWF/domaci.png"
+        }
+    }
+    $(document).ready(function () {
+        $(".collapse").collapse('show');
+    });
+    $("#btnCollapseDown").click(function () {
+        $(".collapse").collapse('show');
+    });
+    $("#btnCollapseUp").click(function () {
+        $(".collapse").collapse('hide');
+    });
+</script>

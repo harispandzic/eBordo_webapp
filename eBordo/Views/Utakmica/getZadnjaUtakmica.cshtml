@@ -1,0 +1,62 @@
+﻿@using eBordo.ViewModels.Igrac.Index
+@model ZadnjaUtakmicaPrikaz
+
+@{ 
+    bool utakmica = (bool)ViewData["utakmica"];
+}
+
+<style>
+    #headerOpis {
+        font-weight: bold;
+        font-size: 17px;
+        margin-bottom:10px;
+    }
+    i{
+        margin-right:5px;
+        margin-bottom:8px;
+    }
+</style>
+
+<div class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col" style="margin-bottom:10px;">
+                @if (utakmica)
+                {
+                    <span id="headerOpis">Posljednja utakmica</span><br />
+                }
+                else
+                {
+                    <span id="headerOpis">Naredna utakmica</span><br />
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <i class="far fa-futbol"></i>@Model.domacin - @Model.gost
+                @if (utakmica)
+                {
+                    <b>@Model.goloviDomacin:@Model.goloviGost</b>
+                }
+                <br />
+                <i class="fas fa-flag nav-icon"></i>@Model.vrstaTakmicenja<br />
+                <i class="fas fa-calendar-alt nav-icon"></i>@Model.datumOdigravanja u @Model.satnica<br />
+                <i class="fas fa-map-marker-alt nav-icon"></i>@Model.nazivStadiona<br />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,224 @@
+﻿@using eBordo.ViewModels.Utakmica
+@model IgracUtakmice
+@{
+    ViewBag.Title = "Nastupi igrača";
+}
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterIkona {
+        margin-right: 15px;
+    }
+
+    #grb {
+        height: 40px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    #satnicaTH {
+        width: 82px;
+    }
+
+    #utakmicaTH {
+        width: 370px;
+        text-align: center;
+    }
+
+    #takmicenjeTH {
+        width: 276px;
+    }
+
+    #q {
+        width: 130px;
+    }
+
+    #filterIkona {
+        margin-right: 5px;
+    }
+
+    .izvjestajProgressBar {
+        background-color: #28a745;
+    }
+
+
+    #igracUtakmice {
+        width: 250px;
+    }
+
+    #boja {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Nastupi igrača</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Početna</a></li>
+                    <li class="breadcrumb-item active">Nastupi igrača</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div style="margin-left:10px;margin-right:10px;" class="row">
+    <div class="col-8">
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Nastupi igrača</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Datum</th>
+                                    <th id="satnicaTH">Rezultat</th>
+                                    <th id="utakmicaTH">Utakmica</th>
+                                    <th align="center">
+                                        <img src="https://tmsi.akamaized.net/icons/Spiele.svg" height="30px" />
+                                    </th>
+                                    <th align="center">
+                                        <img src="https://tmsi.akamaized.net/icons/ball_blau.svg" height="25px" />
+                                    </th>
+                                    <th align="center">
+                                        <img src="https://tmsi.akamaized.net/icons/ball_gruen.svg" height="25px" />
+                                    </th>
+                                    <th align="center">
+                                        <img src="https://tmsi.akamaized.net/icons/gelbe_karte.svg" height="25px" />
+                                    </th>
+                                    <th align="center">
+                                        <img src="https://tmsi.akamaized.net/icons/rote_karte.svg" height="25px" />
+                                    </th>
+                                    <th style="width:66px;" align="center">
+                                        <img src="https://i.postimg.cc/xTc7HKQM/bar-chart-676.png" height="25px" />
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (IgracUtakmice.Row i in Model.utakmice)
+                                {
+                                    <tr>
+                                        <td>
+                                            @i.datum.ToString("dd.MM.yyyy")
+                                            <span class="badge badge-warning">prije @i.odigranaDani dana</span>
+                                        </td>
+                                        <td>
+                                            @if (i.rezultat == Data.EntityModels.Rezultat.Pobjeda)
+                                            {
+                                                <span id="boja" class="status text-success">&bull;</span>
+                                                <span>@i.goloviDomaci : @i.goloviGosti</span>
+                                                <span class="badge badge-success">Pobjeda</span>
+                                            }
+                                            @if (i.rezultat == Data.EntityModels.Rezultat.Poraz)
+                                            {
+                                                <span id="boja" class="status text-danger">&bull;</span>
+                                                <span>@i.goloviDomaci : @i.goloviGosti</span>
+                                                <span class="badge badge-danger">Poraz</span>
+                                            }
+                                            @if (i.rezultat == Data.EntityModels.Rezultat.Nerješeno)
+                                            {
+                                                <span id="boja" class="status text-secondary">&bull;</span>
+                                                <span>@i.goloviDomaci : @i.goloviGosti</span>
+                                                <span class="badge badge-secondary">Nerješeno</span>
+                                            }
+                                        </td>
+                                        <td id="utakmicaTH">
+                                            <div>
+                                                @i.domacin <img id="grb" src="~/uploads/@i.domacinGrb" /> <img style="padding-right:5px; padding-left:5px; height:30px;" src="/uploads/@i.vrstaTakmicenjaSlika" /><img id="grb" src="~/uploads/@i.gostGrb" />@i.gost<br />
+                                            </div>
+                                        </td>
+                                        <td id="broj">@i.minute</td>
+                                        <td id="broj">@i.golovi</td>
+                                        <td id="broj">@i.asistencije</td>
+                                        <td id="broj">@i.zutiKartoni</td>
+                                        <td id="broj">@i.crveniKartoni</td>
+                                        <td id="ocjeneTD">
+                                            <b class="ocjenaVrijednost">@i.ocjena</b>
+                                            <div class="progress" style="height: 4px;">
+                                                <div class="progress-bar" style="width:20%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+
+    </div>
+</div>
+
+
+<style>
+    .progress {
+        background-color: #E9ECEF;
+    }
+
+    #ocjenaVrijednost {
+        font-size: 19px;
+    }
+
+    .card-header {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var progressBar = document.getElementsByClassName("progress-bar");
+        var vrijednosti = document.getElementsByClassName("ocjenaVrijednost");
+        for (var i = 0; i < vrijednosti.length; i++) {
+            var variable = parseFloat(vrijednosti[i].innerText) * 10;
+            var unit = "%";
+            var z = variable + unit;
+            $(progressBar[i]).css("width", z);
+            var vrijednost = parseFloat(vrijednosti[i].innerText);
+            if (vrijednost >= 3 && vrijednost < 8) {
+                vrijednosti[i].style.color = "#FFC107";
+                progressBar[i].style.backgroundColor = "#FFC107";
+                //$(progressBar[i]).addClass("bg-warning");
+            }
+            else if (vrijednost >= 8 && vrijednost <= 10) {
+                vrijednosti[i].style.color = "#28A745";
+                progressBar[i].style.backgroundColor = "#28A745";
+            }
+            else {
+                vrijednosti[i].style.color = "#DC3545";
+                progressBar[i].style.backgroundColor = "#DC3545";
+                //$(progressBar[i]).addClass("bg-danger");
+            }
+        }
+    });
+</script>

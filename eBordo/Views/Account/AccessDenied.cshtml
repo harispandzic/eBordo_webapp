@@ -1,0 +1,43 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    string lokacija = "/Identity/Account/Login";
+    if (k == null)
+    {
+        lokacija = "/Identity/Account/Login";
+    }
+    else
+    {
+        if (k.isIgrac)
+        {
+            lokacija = "/Igrac/Index";
+        }
+        if (k.isTrener)
+        {
+            lokacija = "/Trener/Index";
+        }
+    }
+}
+
+<style>
+    #bojaSlova {
+        color: maroon;
+    }
+</style>
+
+
+<link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+<div class="error-page">
+    <h2 class="headline text-warning"> 403</h2>
+    <div class="error-content">
+        <h3><i class="fas fa-exclamation-triangle text-warning"></i>Pristup odbijen!</h3>
+        <p>
+            Nemate permisije za pristup stranici, <a id="bojaSlova" href="@lokacija">vrati se na početnu</a> ili se <a id="bojaSlova" href="/Identity/Account/Login">prijavite kao drugi korisnik!</a>
+        </p>
+    </div>
+</div>

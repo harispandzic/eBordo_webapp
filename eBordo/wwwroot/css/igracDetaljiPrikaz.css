@@ -1,0 +1,48 @@
+.avatar1 {
+    vertical-align: middle;
+    width: 45px;
+    height: 45px;
+    border-radius: 55%;
+}
+
+.spanStatistika, .spanStatistikaShow {
+    font-size: 40px;
+    color: maroon;
+}
+
+.col-sm {
+    text-align: center;
+}
+
+#slikaStatistika {
+    margin-bottom: 5px;
+}
+
+#brojDresa {
+    font-size: 50px;
+    position: absolute;
+    top: 7px;
+    right: 60px;
+    color: maroon;
+}
+
+#prosjecnaOcjena {
+    text-align: center;
+}
+
+    #prosjecnaOcjena #ocjena {
+        font-size: 50px;
+        color: maroon;
+    }
+
+#stavkeSpan {
+    color: maroon;
+}
+
+#detaljnaStatistika {
+    text-align: center;
+}
+
+#DownUp {
+    text-align: right;
+}

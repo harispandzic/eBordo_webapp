@@ -1,0 +1,380 @@
+﻿@model eBordo.ViewModels.Igrac.DetaljiStatistikaVM
+
+<style>
+    .avatar {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    .spanStatistika, .spanStatistikaShow {
+        font-size: 40px;
+        color: maroon;
+    }
+
+    .col-sm {
+        text-align: center;
+    }
+
+    #slikaStatistika {
+        margin-bottom: 5px;
+    }
+
+    #brojDresa {
+        font-size: 50px;
+        position: absolute;
+        top: 7px;
+        right: 60px;
+        color: maroon;
+    }
+
+    #prosjecnaOcjena {
+        text-align: center;
+    }
+
+        #prosjecnaOcjena #ocjena {
+            font-size: 50px;
+            color: maroon;
+        }
+
+    #stavkeSpan {
+        color: maroon;
+    }
+
+    #detaljnaStatistika {
+        text-align: center;
+    }
+
+    #DownUp {
+        text-align: right;
+    }
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #statistikaLogo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 30px;
+    }
+
+    #kolonaSredina {
+        text-align: center;
+    }
+
+    #podatakSpan {
+        color: maroon;
+        font-weight: bold;
+    }
+</style>
+
+<div class="row">
+    <div class="col" id="kolonaSredina">
+        <img id="statistikaLogo" src="https://i.postimg.cc/gJLFyy3D/pngkey-com-name-tag-png-1254679-1.png" />
+        <b>Ime i prezime</b>
+    </div>
+    <div class="col-4" id="kolonaSredina">
+        <img id="statistikaLogo" src="https://i.postimg.cc/MHkT1pfn/favpng-citizenship-passport.png" />
+        <b>Državljanstvo</b>
+    </div>
+    <div class="col" id="kolonaSredina">
+        <img id="statistikaLogo" src="https://i.postimg.cc/s2dCFFG6/pngegg.png" />
+        <b>Pozicija</b>
+    </div>
+</div>
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <span id="podatakSpan">
+            <img src="~/uploads/@Model.slika" class="avatar" alt="Avatar"> <span>@Model.ime @Model.prezime</span><b style="color:maroon;"> #@Model.brojDresa</b>
+        </span>
+    </div>
+    <div class="col-4 d-flex justify-content-center">
+        <span id="podatakSpan">
+            <img class="mojaKlasa" src="~/uploads/@Model.zastava" />
+            @Model.drzavljanstvo
+        </span>
+    </div>
+    <div class="col d-flex justify-content-center">
+        <span id="podatakSpan">
+            @if (Model.pozicija == "GOLMAN")
+            {
+                <span id="boja1" class="status text-dark">&bull;</span>
+            }
+            @if (Model.pozicija == "ODBRANA")
+            {
+                <span id="boja1" class="status text-warning">&bull;</span>
+            }
+            @if (Model.pozicija == "VEZNJAK")
+            {
+                <span id="boja1" class="status text-danger">&bull;</span>
+            }
+            @if (Model.pozicija == "KRILO")
+            {
+                <span id="boja1" class="status text-success">&bull;</span>
+            }
+            @if (Model.pozicija == "NAPADAČ")
+            {
+                <span id="boja1" class="status text-primary">&bull;</span>
+            }
+            @Model.pozicija<br />
+        </span>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://tmsi.akamaized.net/icons/Spiele.svg" height="30px" /><br />
+        <b><span>Nastupa </span></b><br /> <span class="spanStatistika broj">@Model.brojNastupa</span><br />
+    </div>
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://tmsi.akamaized.net/icons/Spiele.svg" height="30px" /><br />
+        <b><span>Minute </span></b><br /> <span class="spanStatistika broj">@Model.odigraneMinute</span><br />
+    </div>
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://tmsi.akamaized.net/icons/ball_blau.svg" height="30px" /><br />
+        <b><span>Golovi </span></b><br /> <span class="spanStatistika">@Model.golovi</span><br />
+    </div>
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://tmsi.akamaized.net/icons/ball_gruen.svg" height="30px" /><br />
+        <b><span>Asistencije </span></b><br /> <span class="spanStatistika">@Model.asistencije</span><br />
+    </div>
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://tmsi.akamaized.net/icons/gelbe_karte.svg" height="30px" /><br />
+        <b><span>Žuti kartoni </span></b><br /> <span class="spanStatistika">@Model.zutiKartoni</span><br />
+    </div>
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://tmsi.akamaized.net/icons/rote_karte.svg" height="30px" /><br />
+        <b><span>Crveni kar. </span></b><br /> <span class="spanStatistika">@Model.crveniKartoni</span><br />
+    </div>
+    <div class="col-sm">
+        <img id="slikaStatistika" src="https://i.postimg.cc/xTc7HKQM/bar-chart-676.png" height="30px" /><br />
+        <b><span>Ocjena </span></b><br />
+        <span class="broj" style="font-size: 40px;color: maroon;">@Model.prosjecnaOcjena</span><br />
+    </div>
+</div>
+<div class="row">
+    <span id="nastupiUkupno" hidden>@Model.brojUtakmica</span><br />
+    <span id="minute" hidden>@Model.brojMinuta</span>
+    <div class="col-sm" style="text-align:center;">
+        <div class="container">
+            <div class="progress">
+                <div style="color:black;" class="progress-bar bg-info" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="@Model.brojUtakmica"></div><br />
+            </div>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div style="color:black;" class="progress-bar bg-info" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="@Model.brojMinuta"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm">
+
+    </div>
+    <div class="col-sm">
+
+    </div>
+    <div class="col-sm">
+
+    </div>
+    <div class="col-sm">
+
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-info" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr style="width:97%;" />
+
+
+<div class="row" id="detaljnaStatistika">
+    <div class="col-sm">
+        <b><span>Kontrola lopte</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.kontrolaLopte</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Driblanje</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.dribljanje</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Dodavanje</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.dodavanje</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Kretanje</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.kretanje</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Brzina</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.brzina</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Šut</span></b><br /><span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.sut</span><br />
+    </div>
+</div>
+<div class="row" id="detaljnaStatistika">
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+</div>
+<div class="row" id="detaljnaStatistika">
+    <div class="col-sm">
+        <b><span>Snaga</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.snaga</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Markiranje</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.markiranje</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Klizeći st.</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.klizeciStart</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Skok</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.skok</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Odbrana</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.odbrana</span><br />
+    </div>
+    <div class="col-sm">
+        <b><span>Prosjek</span></b><br /> <span class="statistikaIgraci" style="font-size: 40px;color: maroon;">@Model.prosjecnaOcjenaStavke</span><br />
+    </div>
+</div>
+<div class="row" id="detaljnaStatistika">
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+    <div class="col-sm">
+        <div class="container">
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width:20%"></div>
+            </div><br>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        var progressBar = document.getElementsByClassName("progress-bar bg-success");
+        var vrijednosti = document.getElementsByClassName("statistikaIgraci");
+        for (var i = 0; i < vrijednosti.length; i++) {
+            var variable = parseFloat(vrijednosti[i].innerText) * 10;
+            $(progressBar[i]).html(variable + "%");
+            var unit = "%";
+            var z = variable + unit;
+            $(progressBar[i]).css("width", z);
+            var vrijednost = parseFloat(vrijednosti[i].innerText);
+            if (vrijednost >= 3 && vrijednost < 8) {
+                vrijednosti[i].style.color = "#FFC107";
+                $(progressBar[i]).addClass("bg-warning");
+            }
+            else if (vrijednost >= 8 && vrijednost <= 10) {
+                vrijednosti[i].style.color = "#28A745";
+            }
+            else {
+                vrijednosti[i].style.color = "#DC3545";
+                $(progressBar[i]).addClass("bg-danger");
+            }
+        }
+        var progressBar1 = document.getElementsByClassName("progress-bar bg-info");
+        var vrijednosti1 = document.getElementsByClassName("broj");
+        for (var i = 0; i < vrijednosti1.length; i++) {
+            var variable;
+            if (i == 0) {
+                variable = parseFloat(vrijednosti1[i].innerText);
+                var brojUtakmica = parseInt(document.getElementById("nastupiUkupno").innerText);
+                var perc = ((variable / brojUtakmica) * 100).toFixed(0);
+                $(progressBar1[i]).html(perc + "%");
+                variable = perc;
+            }
+            if (i == 1) {
+                variable = parseFloat(vrijednosti1[i].innerText);
+                var brojMinuta = parseInt(document.getElementById("minute").innerText);
+                var perc = ((variable / brojMinuta) * 100).toFixed(0);
+                $(progressBar1[i]).html(perc + "%");
+                variable = perc;
+            }
+            if (i == 2) {
+                variable = parseFloat(vrijednosti1[i].innerText) * 10;
+                $(progressBar1[i]).html(variable + "%");
+            }
+            var unit = "%";
+            var z = variable + unit;
+            $(progressBar1[i]).css("width", z);
+        }
+    });
+</script>

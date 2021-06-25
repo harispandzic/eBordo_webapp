@@ -1,0 +1,97 @@
+﻿@using eBordo_seminarski_rad.ViewModels.Drzava
+@model DrzavaUrediDodajVM
+
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="snimi" asp-action="SnimiUrediDodaj" asp-controller="Drzava" enctype="multipart/form-data">
+                <div class="modal-header">
+                    @if (@Model.drzavaID == 0)
+                    {
+                        <h4 class="modal-title">Dodaj državu</h4>
+                    }
+                    else
+                    {
+                        <h4 class="modal-title">Uredi državu</h4>
+                    }
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" readonly asp-for="drzavaID" />
+
+                        <label asp-for="nazivDrzave">Naziv države</label>
+                        <input asp-for="nazivDrzave" type="text" class="form-control"><br>
+
+                        <label asp-for="zastavaNew">Zastava</label>
+                        <div class="custom-file mb-3">
+                            <input type="file" class="custom-file-input" asp-for="zastavaNew" accept="image/*" onchange="generisiPreview(this)">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
+                        <div class="form-group">
+                        @if (Model.zastavaCurrent == null)
+                        {
+                            <img id="previewImg" style="height: 200px;width:100%" display: block" src="~/upload.png" />
+                        }
+                        else
+                        {
+                            <img id="previewImg" style="height: 200px;width:100%" src="/uploads/@Model.zastavaCurrent" />
+                        }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span id="btnIkona"><i class="fa fa-remove"></i></span>Poništi akciju
+                    </button>
+                    @if (@Model.drzavaID == 0)
+                    {
+                        <button type="submit" class="btn btn-success">
+                            <span id="btnIkona"><i class="fa fa-check"></i></span>Kreiraj državu
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-labeled btn-warning">
+                            <span id="btnIkona"><i class="fa fa-check"></i></span>Snimi izmjene
+                        </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#snimi").validate({
+                rules: {
+                    nazivDrzave: {
+                        required: true,
+                        minlength: 3
+                    }
+                },
+                messages: {
+                    nazivDrzave: {
+                        required: "Obavezno polje!",
+                        minlength: "Polje mora imati minimalno 3 karaktera!"
+                    }
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback");
+                        error.insertAfter(element);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+
+        });
+</script>

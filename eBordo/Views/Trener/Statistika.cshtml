@@ -1,0 +1,163 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    ViewBag.Title = "Statistika";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<style>
+    #iStatistika {
+        margin-right: 5px;
+        font-size: 15px;
+    }
+
+    .card-header {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ocjenaOpis {
+        font-size: 13px;
+        color: black;
+    }
+
+    #ribonBoja {
+        background-color: #BEBEBE;
+    }
+</style>
+<span hidden id="trenerID">@k.trenerID</span>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Statistika trenera</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Početna</a></li>
+                    <li class="breadcrumb-item active">Statistika trenera</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+<div style="margin-left:10px;margin-right:10px;" class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Utakmice</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="ucitajUtakmice"></div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Statistika trenera</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="ucitajStatistiku"></div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Grafički prikaz statistike</h3>
+                    </div>
+                    <div class="card-body">
+                        <div Style="font-family: Corbel; font-size: small ;text-align:center " class="row">
+                            <div style="width:100%;height:40%">
+                                <canvas id="myChart" style="padding: 0;margin: auto;display: block; "> </canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var trenerID = parseInt(document.getElementById("trenerID").innerText);
+        ucitajUtakmice(trenerID);
+        ucitajStatistiku(trenerID);
+        ucitajChart(trenerID);
+    });
+    function ucitajChart(trenerID) {
+        $.ajax({
+            type: "POST",
+            url: "/Trener/NewChart?trenerID=" + trenerID,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (chData) {
+                var aData = chData;
+                var aLabels = aData[0];
+                var aDatasets1 = aData[1];
+                var dataT = {
+                    labels: aLabels,
+                    datasets: [{
+                        label: "Ocjena",
+                        data: aDatasets1,
+                        fill: false,
+                        backgroundColor: ["#9CC062", "#E17646", "#724D8C"],
+                        borderColor: ["#9CC062", "#E17646", "#724D8C"],
+                        borderWidth: 1
+                    }]
+                };
+                var ctx = $("#myChart").get(0).getContext("2d");
+                var myNewChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: dataT,
+                    options: {
+                        responsive: true,
+                        title: { display: true, text: 'Omjer pobjeda, poraza i nerješenih utakmica' },
+                        legend: { position: 'bottom' },
+                        scales: {
+                            xAxes: [{ gridLines: { display: false }, display: false, scaleLabel: { display: false, labelString: '' } }],
+                            yAxes: [{ gridLines: { display: false }, display: false, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 2, beginAtZero: true } }]
+                        },
+                    }
+                });
+            }
+        });
+    }
+    function ucitajUtakmice(trenerID) {
+        $(document).ready(function () {
+            var url = "/Trener/trenerUtakmice?trenerID=" + trenerID;
+            $.get(url, function (d) {
+                $("#ucitajUtakmice").html(d);
+            });
+        });
+    }
+    function ucitajStatistiku(trenerID) {
+        $(document).ready(function () {
+            var url = "/Trener/trenerStatistika?trenerID=" + trenerID;
+            $.get(url, function (d) {
+                $("#ucitajStatistiku").html(d);
+            });
+        });
+    }
+</script>

@@ -1,0 +1,267 @@
+﻿@using eBordo.ViewModels.Trener
+@model TrenerUrediDodaj
+
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+<link rel="stylesheet" href="~/css/igracDodaj.css">
+
+<div class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <img id="slikaWatermark" src="~/sarajevo.png" />
+            <form id="snimi" asp-action="SnimiDodaj" asp-controller="Trener" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h4 class="modal-title">Dodaj trenera</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <img id="previewImg" style="height: 170px; width: 120px; display: block; border: 2px solid maroon; margin-top: 4px; margin-right: 10px;" src="~/uploadIgrac.png" />
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <input type="hidden" readonly asp-for="trenerID" />
+
+                                <label>Ime</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-id-card" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input type="text" asp-for="ime" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+
+                                <label>E-mail adresa</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input type="text" asp-for="emailAdresa" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+
+                            </div>
+                            <div class="col-5">
+                                <label>Prezime</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-id-card" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input type="text" asp-for="prezime" class="form-control" aria-describedby="basic-addon1">
+                                </div>
+
+                                <label>Datum rođenja</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input asp-for="datumRodjenja" type="date" class="form-control" required><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <input id="FileUpload1" hidden type="file" class="custom-file-input" asp-for="slikaNew" accept="image/*" onchange="generisiPreview(this)">
+
+                                <label>Državljanstvo</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-flag" aria-hidden="true"></i></span>
+                                    </div>
+                                    <select class="form-control" asp-for="drzavljanstvoID" asp-items="Model.drzave"></select><br>
+                                </div>
+
+                                <label>Grad rođenja</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                                    </div>
+                                    <select class="form-control" asp-for="gradRodjenjaID" asp-items="Model.gradovi"></select><br>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Preferirana formacija</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"> <i class="fa fa-heart" aria-hidden="true"></i></span>
+                                            </div>
+                                            <select class="form-control" asp-for="preferiranaFormacija" asp-items="Model.formacije"></select><br>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label>Licenca</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"> <i class="fa fa-star" aria-hidden="true"></i></span>
+                                            </div>
+                                            <select class="form-control" asp-for="nazivLicence" asp-items="Model.licence"></select><br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label>Datum pristupa klubu</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input asp-for="datumPristupaKlubu" type="date" class="form-control"><br>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Adresa prebivališta</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input asp-for="adresaPrebivalista" type="text" class="form-control"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label>Telefon</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-phone" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input asp-for="telefon" type="text" class="form-control"><br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label>Transfermarkt link</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-link" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input asp-for="transferMarktAcc" type="text" class="form-control"><br />
+                                </div>
+
+                                <label>Dosadašnji klubovi</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"> <i class="fa fa-history" aria-hidden="true"></i></span>
+                                    </div>
+                                    <input asp-for="dosadasnjiKlubovi" type="text" class="form-control"><br>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label>Prva zvanična utakmica</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input asp-for="prvaZvanicnaUtakmica" type="date" class="form-control"><br>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label>Tržišna vrijednost</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend" style="height:38px;">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-money" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input asp-for="trzisnaVrijednost" type="number" class="form-control"><br><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span id="btnIkona"><i class="fa fa-remove"></i></span>Poništi akciju
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <span id="btnIkona"><i class="fa fa-check"></i></span>Dodaj trenera
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#snimi").validate({
+            rules: {
+                ime: {
+                    required: true,
+                    maxlength: 15
+                },
+                prezime: {
+                    required: true,
+                    maxlength: 15
+                },
+                emailAdresa: {
+                    required: true,
+                    email: true,
+                },
+                adresaPrebivalista: {
+                    required: true,
+                    maxlength: 15
+                },
+                telefon: {
+                    required: true,
+                    regex: /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+                },
+                transferMarktAcc: {
+                    regex: /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]!\$&'\(\)\*\+,;=.]+$/,
+                    required: true
+                },
+                trzisnaVrijednost: {
+                    min: 10000,
+                    required: true
+                }
+            },
+            messages: {
+                ime: {
+                    required: "Obavezno polje!",
+                    maxlength: "Prekoračena je dužina!"
+                },
+                prezime: {
+                    required: "Obavezno polje!",
+                    maxlength: "Prekoračena je dužina!"
+                },
+                emailAdresa: {
+                    required: "Obavezno polje!",
+                    email: "Neispravan format!",
+                },
+                adresaPrebivalista: {
+                    required: "Obavezno polje!",
+                    maxlength: "Prekoračena je dužina!"
+                },
+                telefon: {
+                    required: "Obavezno polje!",
+                    regex: "Neispravan format!",
+                },
+                transferMarktAcc: {
+                    regex: "Neispravan format!",
+                    required: "Obavezno polje!"
+                },
+                trzisnaVrijednost: {
+                    min: "Neispravan format!",
+                    max: "Neispravan format!",
+                    required: "Obavezno polje!"
+                }
+            },
+            errorElement: "em",
+            errorPlacement: function (error, element) {
+                error.addClass("invalid-feedback");
+                error.insertAfter(element);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass("is-invalid").removeClass("is-valid");
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).addClass("is-valid").removeClass("is-invalid");
+            }
+        });
+
+    });
+    var fileupload = document.getElementById("FileUpload1");
+    var image = document.getElementById("previewImg");
+    image.onclick = function () {
+        fileupload.click();
+    };
+</script>

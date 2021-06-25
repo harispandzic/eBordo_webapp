@@ -1,0 +1,185 @@
+﻿@using eBordo.ViewModels.Trening
+@using eBordo.Helper
+@using Data.EntityModels
+@model TreningPrikazVM
+
+@{
+    ViewData["Title"] = "Trening";
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+}
+
+<link rel="stylesheet" href="~/css/Prikaz.css">
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterIkona {
+        margin-right: 15px;
+    }
+
+    #grb {
+        height: 40px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    #satnicaTH {
+        width: 82px;
+    }
+
+    #utakmicaTH {
+        width: 370px;
+        text-align: center;
+    }
+
+    #takmicenjeTH {
+        width: 276px;
+    }
+
+    #q {
+        width: 130px;
+    }
+
+    #filterIkona {
+        margin-right: 5px;
+    }
+
+    th {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    td {
+        color: black;
+    }
+</style>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        <span><i class="fas fa-calendar-alt"></i> Datum</span>
+                    </th>
+                    <th width="76px;">
+                        <span><i class="far fa-clock"></i> Satnica</span>
+                    </th>
+                    <th width="176px;">
+                        <i class="fas fa-map-marker-alt"></i><br />
+                        <span>Satnica</span>
+                    </th>
+                    <th width="196px;">
+                        <i class="fas fa-user"></i><br />
+                        <span>Trener</span>
+                    </th>
+                    <th>
+                        <i class="fas fa-running"></i><br />
+                        <span>Program treninga</span>
+                    </th>
+                    @if (k.isAdmin || k.isTrener)
+                    {
+                        <th>Akcije</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model.treninzi)
+                {
+                    <tr>
+                        <td>
+                            @i.datumOdrzavanja.ToString("dd.MM.yyyy")
+                            @if (i.brojDana < 0)
+                            {
+                                <span class="badge badge-success">Završen</span>
+                            }
+                            else if (i.brojDana == 0)
+                            {
+                                <span class="badge badge-danger">Danas</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">za @i.brojDana dana</span>
+                            }
+                        </td>
+                        <td>@i.satnica</td>
+                        <td>
+                            @if (i.lokacija == Data.EntityModels.LokacijaTreninga.Stadion)
+                            {
+                                <span>Stadion Koševo</span>
+                            }
+                            @if (i.lokacija == Data.EntityModels.LokacijaTreninga.Trening_centar)
+                            {
+                                <span>Trening centar Butmir</span>
+                            }
+                        </td>
+                        <td>
+                            <img src="~/uploads/@i.trenerSlika" class="avatar" alt="Avatar">
+                            @i.trener
+                        </td>
+                        <td>@i.fokusTreninga</td>
+                            @if (k.isAdmin || k.isTrener)
+                            {
+                                <td id="ikonice">
+                                    @if (k.isTrener)
+                                    {
+                                        <a href="#" onclick="urediTrening(@i.treningID)" class="edit" title="Uredi" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                    }
+                                    @if (k.isAdmin)
+                                    {
+                                        <a href="#" onclick="obrisiTrening(@i.treningID)" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                    }
+                                </td>
+                            }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function obrisiTrening(treningID) {
+        $(document).ready(function () {
+            var url = "/Trening/obrisiTrening?treningID=" + treningID;
+            $.get(url, function (d) {
+                notifikacija("Uspješno ste obrisali zapis!")
+                ucitajTreninge();
+            });
+        });
+    }
+    function urediTrening(treningID) {
+        $(document).ready(function () {
+            var url = "/Trening/dodajTrening?treningID=" + treningID;
+            $.get(url, function (d) {
+                $("#dodajUrediTrening").html(d);
+            });
+        });
+    }
+    function ucitajTreninge() {
+        $(document).ready(function () {
+            var url = "/Trening/Prikaz";
+            $.get(url, function (d) {
+                $("#prikazTreninga").html(d);
+            });
+        });
+    }
+</script>

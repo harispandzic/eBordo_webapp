@@ -1,0 +1,351 @@
+﻿
+@model eBordo.ViewModels.Izvještaj.IzvjestajKreirajVM
+
+@{
+    var izmjena = (bool)ViewData["izmjena"];
+}
+
+<style>
+    #grb1 {
+        height: 60px;
+    }
+
+    #imeKlupa {
+        font-size: 20px;
+        margin-right: 15px;
+        margin-left: 15px;
+    }
+
+    #snimiIzvjestaj {
+        margin-bottom: 20px;
+    }
+
+    #colPadding {
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: center;
+    }
+
+    #statistikaLogo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 20px;
+    }
+
+    #statistika {
+        margin-bottom: 5px;
+    }
+
+    .modal {
+        overflow: scroll;
+    }
+
+    #previewSlika {
+        border: 1px solid maroon;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="padding-bottom:20px;">
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj izvještaj</h5>
+                <button onclick="prikaz()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="snimiIzvjestaj" asp-action="snimiDodaj" asp-controller="Izvještaj" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col" align="center">
+                            <div>
+                                <span id="imeKlupa">@Model.domacin</span> <img id="grb1" src="~/uploads/@Model.domacinGrb" /> <img style="margin-right:20px; margin-left:20px; height:30px;" src="/uploads/@Model.slikaVrstaTakmicenja  " /><img id="grb1" src="~/uploads/@Model.gostGrb" /><span id="imeKlupa">@Model.gost</span><br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:5px;">
+                        <div class="col" style="text-align:center;">
+                            <b style="color:maroon;">@Model.nazivStadiona, @Model.datumOdigravanja - @Model.satnica</b>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" style="height:170px;">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <input id="utakmicaID" asp-for="utakmicaID" readonly hidden>
+                                    <label>Golovi <b>@Model.domacin</b></label>
+                                    @if (izmjena)
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input readonly asp-for="goloviDomacih" type="number" class="form-control"><br />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input asp-for="goloviDomacih" type="number" class="form-control" required><br />
+                                        </div>
+
+                                    }
+                                </div>
+                                <div class="col">
+                                    <label>Golovi <b>@Model.gost</b></label>
+                                    @if (izmjena)
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input readonly asp-for="goloviGostiju" type="number" class="form-control"><br />
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-futbol-o" aria-hidden="true"></i></span>
+                                            </div>
+                                            <input asp-for="goloviGostiju" type="number" class="form-control" required><br />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>Igrač utakmice</label>
+                                    @if (izmjena)
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-star" aria-hidden="true"></i></span>
+                                            </div>
+                                            <select readonly class="form-control" asp-for="igracUtakmiceID" asp-items="Model.igraci"></select><br>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-star" aria-hidden="true"></i></span>
+                                            </div>
+                                            <select class="form-control" asp-for="igracUtakmiceID" asp-items="Model.igraci" required></select><br>
+                                        </div>
+
+                                    }
+                                </div>
+                                <div class="col">
+                                    <label>Delegat</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-o" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input asp-for="delegatUtakmice" type="text" class="form-control"><br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <label>Vrijeme</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-sun-o" aria-hidden="true"></i></span>
+                                        </div>
+                                        <select class="form-control" asp-for="nazivVremena" asp-items="Model.vrijeme" required></select><br>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>Broj gledalaca</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-users" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input asp-for="brojGledalaca" type="number" class="form-control" required><br />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label>YouTube video</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-youtube-play" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input asp-for="youTubeVideoID" type="text" class="form-control" value="@Model.youTubeVideoID"><br />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>Datum kreiranja</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                        </div>
+                                        <input asp-for="datumKreiranja" type="date" class="form-control" readonly><br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom:5px;">
+                        <div class="col">
+                            <label for="exampleFormControlTextarea4">Zapisnik</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+                                </div>
+                                <textarea placeholder="Zapisnik sa utakmice..." asp-for="zapisnik" class="form-control" id="exampleFormControlTextarea4" rows="9"></textarea>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>Slika</label>
+                            <div class="form-group">
+                                @if (Model.slikaCurrent == null)
+                                {
+                                    <img id="previewSlika" style="width:100%;height: 230px;" src="https://i.postimg.cc/5yyDP0xy/Picture1.png" />
+                                }
+                                else
+                                {
+                                    <img id="previewSlika" style="width:100%;height: 230px;" src="~/uploads/@Model.slikaCurrent" />
+                                }
+                                <input id="uploadSlika" hidden type="file" class="custom-file-input" asp-for="slikaNew" accept="image/*" onchange="generisiSliku(this)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            @if (izmjena)
+                            {
+                                <button id="IzvjestajButton" type="submit" style="float:right;" class="btn btn-warning">
+                                    <span style="margin-right:4px;"><i class="fa fa-check"></i></span> Spasi izmjene
+                                </button>
+                            }
+                            else
+                            {
+                                <button id="IzvjestajButton" type="submit" style="float:right;" class="btn btn-success">
+                                    <span style="margin-right:4px;"><i class="fa fa-check"></i></span> Kreiraj izvještaj
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </form>
+                @if (izmjena)
+                {
+                    <div id="dodajIzmjenu"></div>
+                    <div id="dodajNastup"></div>
+                }
+                else
+                {
+                    <div style="display:none;" id="dodajIzmjenu"></div>
+                    <div style="display:none;" id="dodajNastup"></div>
+                }
+                <div class="row">
+                    <div class="col">
+                        <span style="font-weight:bold;margin-right:5px;">Izvještaj popunio:</span><img src="~/uploads/@Model.trenerSlika" class="avatar" alt="Avatar"><span style="color:maroon;font-weight:bold;">@Model.trener</span>
+                        <span style="color:maroon;font-weight:bold;float:right;">@Model.nazivStadiona, @Model.datumKreiranja</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-warning btn-sm"><span style="float:right;" class="material-icons">get_app</span></button>*@
+                <button onclick="prikaz()" type="button" class="btn btn-success btn-sm"><span style="float:right;" data-dismiss="modal" class="material-icons">keyboard_backspace</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="prikazOcjeneAjax"></div>
+
+<script>
+    var utakmicaID = document.getElementById("utakmicaID").value;
+    $("#snimiIzvjestaj").submit(function (e) {
+        e.preventDefault();
+        var url = "/Izvještaj/snimiDodaj";
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            enctype: "multipart/form-data",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                if (data == "Izvještaj uspješno dodan!") {
+                    notifikacija(data);
+                    document.getElementById("dodajNastup").style.display = 'block';
+                    ucitajDodavanjeIzmjene(utakmicaID);
+                    document.getElementById("dodajIzmjenu").style.display = 'block';
+                    //var url = "/Izvještaj/kreirajIzvjestaj?utakmicaID=" + utakmicaID + "&izmjena=" + true;
+                    //$.get(url, function (d) {
+                    //    $("#ajaxDiv").html(d);
+                    //    $("#ajaxDiv").find('.modal').modal('show');
+                    //});
+                    $("#IzvjestajButton").addClass("btn-warning")
+                    document.getElementById("IzvjestajButton").innerText = 'Spasi izmjene';
+
+                }
+                if (data == "Izvještaj uspješno uređen!") {
+                    notifikacija(data);
+                    document.getElementById("dodajNastup").style.display = 'block';
+                }
+                if (data == "Zapis već postoji!") {
+                    notifikacija(data);
+                }
+            }
+        });
+
+    });
+    function ucitajDodavanjeIzmjene(utakmicaID) {
+        url = "/Izvještaj/dodajIzmjenu?utakmicaID=" + utakmicaID;;
+        $.get(url, function (d) {
+            $("#dodajIzmjenu").html(d);
+        });
+    }
+    function generisiSliku(input) {
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                $("#previewSlika").attr("src", reader.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    var uploadSlika = document.getElementById("uploadSlika");
+    var imageSlika = document.getElementById("previewSlika");
+    imageSlika.onclick = function () {
+        uploadSlika.click();
+    };
+
+    function prikaz() {
+        $(document).ready(function () {
+            window.location.href = "/Izvještaj/Prikaz";
+        });
+    }
+    $(document).ready(function () {
+        var url = "/Izvještaj/DodajNastup?utakmicaID=" + utakmicaID;;
+        $.get(url, function (d) {
+            $("#dodajNastup").html(d);
+        });
+        ucitajDodavanjeIzmjene(utakmicaID);
+    });
+</script>

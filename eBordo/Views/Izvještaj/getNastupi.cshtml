@@ -1,0 +1,186 @@
+﻿@model eBordo.ViewModels.Izvještaj.NastupiVM
+
+@{
+    var broj = (int)TempData["brojNastupa"];
+}
+
+<style>
+    .avatar {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    #ocjeneTD {
+        text-align: center;
+    }
+
+    .ocjenaVrijednost {
+        font-size: 19px;
+    }
+</style>
+@if (Model.nastupi.Count() == broj)
+{
+    <div class="alert alert-success" role="alert">
+        <b>Svi igrači su ocjenjeni!</b>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning" role="alert">
+        Ocjenjeno igrača: <b>@Model.nastupi.Count od @broj</b>
+    </div>
+}
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Igrač</th>
+            <th align="center">
+                <img src="https://tmsi.akamaized.net/icons/Spiele.svg" height="30px" />
+            </th>
+            <th align="center">
+                <img src="https://tmsi.akamaized.net/icons/ball_blau.svg" height="25px" />
+            </th>
+            <th align="center">
+                <img src="https://tmsi.akamaized.net/icons/ball_gruen.svg" height="25px" />
+            </th>
+            <th align="center">
+                <img src="https://tmsi.akamaized.net/icons/gelbe_karte.svg" height="25px" />
+            </th>
+            <th align="center">
+                <img src="https://tmsi.akamaized.net/icons/rote_karte.svg" height="25px" />
+            </th>
+            <th style="width:66px;" align="center">
+                <img src="https://i.postimg.cc/xTc7HKQM/bar-chart-676.png" height="25px" />
+            </th>
+            <th style="width:66px;" align="center">
+                <img src="https://i.postimg.cc/43ChwPpc/Pin-Clipart-com-analysis-clipart-884465.png" height="25px" />
+            </th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.nastupi)
+        {
+            <tr>
+                <td>@i.brojDresa</td>
+                <td>
+                    <img src="~/uploads/@i.slikaIgraca" class="avatar" alt="Avatar">
+                    @i.imePrezime
+                </td>
+                <td>@i.minute</td>
+                <td>@i.golovi</td>
+                <td>@i.asistencije</td>
+                <td>@i.zutiKartoni</td>
+                <td>@i.crveniKartoni</td>
+                <td id="ocjeneTD">
+                    <b class="ocjenaVrijednost">@i.ocjena</b>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar" style="width:20%"></div>
+                    </div>
+                </td>
+                <td id="ocjeneTD">
+                    <b class="ocjenaVrijednost">@i.prosjecnaOcjenaStavki</b>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar" style="width:20%"></div>
+                    </div>
+                </td>
+                <td id="ikonice">
+                    <a href="#" onclick="prikaziOcjene(@i.igracID, @Model.utakmicaID)" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                    <a href="#" onclick="urediOcjene(@i.igracID, @Model.utakmicaID)" class="edit" title="Uredi" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                    <a href="#" onclick="obrisiOcjenu(@i.igracID, @Model.utakmicaID)" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<style>
+    .progress {
+        background-color: #E9ECEF;
+    }
+</style>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        var progressBar = document.getElementsByClassName("progress-bar");
+        var vrijednosti = document.getElementsByClassName("ocjenaVrijednost");
+        for (var i = 0; i < vrijednosti.length; i++) {
+            var variable = parseFloat(vrijednosti[i].innerText) * 10;
+            var unit = "%";
+            var z = variable + unit;
+            $(progressBar[i]).css("width", z);
+            var vrijednost = parseFloat(vrijednosti[i].innerText);
+            if (vrijednost >= 3 && vrijednost < 8) {
+                vrijednosti[i].style.color = "#FFC107";
+                progressBar[i].style.backgroundColor = "#FFC107";
+                //$(progressBar[i]).addClass("bg-warning");
+            }
+            else if (vrijednost >= 8 && vrijednost <= 10) {
+                vrijednosti[i].style.color = "#28A745";
+                progressBar[i].style.backgroundColor = "#28A745";
+            }
+            else {
+                vrijednosti[i].style.color = "#DC3545";
+                progressBar[i].style.backgroundColor = "#DC3545";
+                //$(progressBar[i]).addClass("bg-danger");
+            }
+        }
+    });
+    function obrisiOcjenu(igracID, utakmicaID) {
+        $(document).ready(function () {
+            var url = "/Izvještaj/obrisiOcjenu?igracID=" + igracID + "&utakmicaID=" + utakmicaID;
+            $.ajax({
+                type: "POST",
+                url: url,
+                success: function (msg) {
+                    $(document).ready(function () {
+                        if (msg == "OK") {
+                            var utakmicaID = document.getElementById("utakmicaID").value;
+                            getNastupi(utakmicaID);
+                            notifikacija("Statistika uspješno obrisana!")
+                            url = "/Izvještaj/DodajNastup?utakmicaID=" + utakmicaID;;
+                            $.get(url, function (d) {
+                                $("#dodajNastup").html(d);
+                            });
+                        }
+                    });
+                },
+                error: function (msg) {
+                    notifikacija("Greška u komunikaciji sa serverom!");
+                }
+            });
+        });
+    }
+    function urediOcjene(igracID, utakmicaID) {
+        promjena = true;
+        $(document).ready(function () {
+            var url = "/Izvještaj/UrediNastup?utakmicaID=" + utakmicaID + "&igracID=" + igracID;
+            $.get(url, function (d) {
+                $("#dodajNastup").html(d);
+                $(document).ready(function () {
+                    var utakmicaID = document.getElementById("utakmicaID").value;
+                    var url = "/Izvještaj/getNastupi?utakmicaID=" + utakmicaID;
+                    $.get(url, function (d) {
+                        $("#getNastupi").html(d);
+                    });
+                    document.getElementById("odustaniBtn").style.display = "block";
+                });
+            });
+        });
+    }
+    function prikaziOcjene(igracID, utakmicaID) {
+        $(document).ready(function () {
+            var url = "/Izvještaj/IzvjestajOcjene?igracID=" + igracID + "&utakmicaID=" + utakmicaID;
+            $.get(url, function (d) {
+                $("#prikazOcjeneAjax").html(d);
+                $("#prikazOcjeneAjax").find('.modal').modal('show');
+            });
+        });
+    }
+</script>

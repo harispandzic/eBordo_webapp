@@ -1,0 +1,237 @@
+﻿@using eBordo_seminarski_rad.ViewModels.Klub
+@model KlubUrediDodajVM
+
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+
+<style>
+    #previewGrb, #previewDomaci {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+    }
+</style>
+
+<div class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form id="snimiKlub" asp-action="SnimiUrediDodaj" asp-controller="Klub" enctype="multipart/form-data">
+                <div class="modal-header">
+                    @if (@Model.klubID == 0)
+                    {
+                        <h4 class="modal-title">Dodaj klub</h4>
+                    }
+                    else
+                    {
+                        <h4 class="modal-title">Uredi klub</h4>
+                    }
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                @if (Model.grbCurrent == null)
+                                {
+                                    <img id="previewGrb" style="height: 120px;" src="https://i.postimg.cc/zBpgbRKN/Upload-PNG-Images.png" />
+                                }
+                                else
+                                {
+                                    <img id="previewGrb" style="height: 120px;" src="~/uploads/@Model.grbCurrent" />
+                                }
+                                <label style="text-align:center;width: 100%;float:right;">Grb</label>
+                            </div>
+                        </div>
+                        <div class="col" style="border-right: 1px solid #D0D0D0">
+                            <div class="form-group">
+                                @if(Model.domaci.slikaTrenutna == null)
+                                {
+                                    <img id="previewDomaci" style="height: 120px; margin-right:0px;" src="https://i.postimg.cc/zBpgbRKN/Upload-PNG-Images.png" />
+                                }
+                                else
+                                {
+                                    <img id="previewDomaci" style="height: 120px; margin-right:0px;" src="/uploads/@Model.domaci.slikaTrenutna" @*onmouseover="prikaziDiv()" onmouseout="sakrijDiv()"*@ />
+                                }
+                                <label style="text-align:center;width: 120px;float:right;">Domaći dres</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @if (Model.gostujuci.slikaTrenutna == null)
+                                {
+                                    <img id="previewGostujuci" style="height: 120px; margin-left:0px;" src="https://i.postimg.cc/zBpgbRKN/Upload-PNG-Images.png" />
+                                }
+                                else
+                                {
+                                    <img id="previewGostujuci" style="height: 120px; margin-left:0px;" src="/uploads/@Model.gostujuci.slikaTrenutna" @*onmouseover="prikaziDiv()" onmouseout="sakrijDiv()"*@/>
+                                }
+                                <label style="text-align:center;width: 120px;float:left;">Gostujući dres</label>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <input type="hidden" readonly asp-for="klubID" />
+
+                                <label>Naziv kluba</label>
+                                @if (Model.klubID == 0)
+                                {
+                                    <input asp-for="nazivKluba" type="text" class="form-control" required><br>
+                                }
+                                else
+                                {
+                                    <input disabled asp-for="nazivKluba" type="text" class="form-control" required><br>
+                                }
+
+                                <label>Grad</label>
+                                @if (Model.klubID == 0)
+                                {
+                                    <select class="form-control" asp-for="klubGradID" asp-items="Model.gradovi" required></select><br>
+                                }
+                                else
+                                {
+                                    <select disabled class="form-control" asp-for="klubGradID" asp-items="Model.gradovi" required></select><br>
+                                }
+
+                                <label>Naziv stadiona</label>
+                                @if (Model.klubID == 0)
+                                {
+                                    <input asp-for="imeStadiona" type="text" class="form-control" required><br>
+                                }
+                                else
+                                {
+                                    <input disabled asp-for="imeStadiona" type="text" class="form-control" required><br>
+                                }
+                                @if (Model.klubID == 0)
+                                {
+                                    <input id="uploadGrb" hidden type="file" class="custom-file-input" asp-for="grbNew" accept="image/*" onchange="generisiGrb(this)">
+                                    <input id="uploadStadion" hidden type="file" class="custom-file-input" asp-for="slikaStadionaNew" accept="image/*" onchange="generisiStadion(this)">
+                                }
+
+                                <input id="uploadDomaciDres" hidden type="file" class="custom-file-input" asp-for="domaci.garnituraSlika" accept="image/*" onchange="generisiDomaciDres(this)">
+                                <input id="uploadGostujuciDres" hidden type="file" class="custom-file-input" asp-for="gostujuci.garnituraSlika" accept="image/*" onchange="generisiGostujuciDres(this)">
+                                <input hidden asp-for="domaci.garnituraID" type="text" class="form-control" required><br>
+                                <input hidden asp-for="gostujuci.garnituraID" type="text" class="form-control" required><br>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @if (Model.slikaStadionaCurrent == null)
+                                {
+                                    <img id="previewStadion" style="width:100%;height: 250px;" src="https://i.postimg.cc/zBpgbRKN/Upload-PNG-Images.png" />
+                                }
+                                else
+                                {
+                                    <img id="previewStadion" style="width:100%;height: 250px;" src="/uploads/@Model.slikaStadionaCurrent" />
+                                }
+                                <label style="text-align:center;width: 100%;float:right;">Stadion</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span id="btnIkona"><i class="fa fa-remove"></i></span>Poništi akciju
+                    </button>
+                    @if(@Model.klubID == 0)
+                    {
+                        <button type="submit" class="btn btn-success">
+                            <span id="btnIkona"><i class="fa fa-check"></i></span>Kreiraj klub
+                        </button>
+                    }
+                    else{
+                        <button type="submit" class="btn btn-labeled btn-warning">
+                            <span id="btnIkona"><i class="fa fa-check"></i></span>Snimi izmjene
+                        </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function prikaziDiv() {
+        document.getElementById('novaSlika').style.display = 'block';
+    }
+    function sakrijDiv() {
+        document.getElementById('novaSlika').style.display = 'none';
+    }
+    function generisiGrb(input) {
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                $("#previewGrb").attr("src", reader.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    var uploadGrb = document.getElementById("uploadGrb");
+    var imageGrb = document.getElementById("previewGrb");
+    imageGrb.onclick = function () {
+        uploadGrb.click();
+    };
+    function generisiDomaciDres(input) {
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                $("#previewDomaci").attr("src", reader.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+    var uploadDomaciDres = document.getElementById("uploadDomaciDres");
+    var imageDomaciDres = document.getElementById("previewDomaci");
+    imageDomaciDres.onclick = function () {
+        uploadDomaciDres.click();
+    };
+
+    function generisiGostujuciDres(input) {
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                $("#previewGostujuci").attr("src", reader.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+    var uploadGostujuciiDres = document.getElementById("uploadGostujuciDres");
+    var imageGostujuciDres = document.getElementById("previewGostujuci");
+    imageGostujuciDres.onclick = function () {
+        uploadGostujuciiDres.click();
+    };
+
+    function generisiStadion(input) {
+        var file = input.files[0];
+
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                $("#previewStadion").attr("src", reader.result);
+            }
+
+            reader.readAsDataURL(file);
+        }
+    }
+    var uploadStadion = document.getElementById("uploadStadion");
+    var imageStadion = document.getElementById("previewStadion");
+    imageStadion.onclick = function () {
+        uploadStadion.click();
+    };
+</script>

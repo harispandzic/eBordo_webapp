@@ -1,0 +1,58 @@
+﻿@model eBordo.ViewModels.Izvještaj.IzvjestajDodajIzborVM
+
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Dodaj izvještaj</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <label>Utakmica</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-hashtag" aria-hidden="true"></i></span>
+                            </div>
+                        <select id="utakmicaID" class="form-control" asp-for="utakmicaID" asp-items="Model.utakmice" required></select><br>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.utakmice.Count() == 0)
+                {
+                    <div class="row">
+                        <div class="col">
+                            <div class="alert alert-info" role="alert">
+                                Trenutno nema dostupnih utakmica!
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success" data-dismiss="modal" onclick="kreirajIzvjestaj()">
+                    <span style="margin-right:4px;"><i class="fa fa-check"></i></span> Kreiraj izvještaj
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ajaxDiv1"></div>
+
+<script>
+    function kreirajIzvjestaj() {
+        $(document).ready(function () {
+            var e = document.getElementById("utakmicaID");
+            var utakmicaID = e.options[e.selectedIndex].value;
+            var url = "/Izvještaj/kreirajIzvjestaj?utakmicaID=" + utakmicaID;
+            $.get(url, function (d) {
+                $("#ajaxDiv1").html(d);
+                $("#ajaxDiv1").find('.modal').modal('show');
+            });
+        });
+    }
+</script>

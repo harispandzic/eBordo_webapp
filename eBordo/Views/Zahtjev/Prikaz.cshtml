@@ -1,0 +1,239 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@using eBordo.ViewModels.Zahtjev
+@using eBordo.Data;
+@model ZahtjevPrikazVM
+
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    ViewData["Title"] = "Zahtjevi";
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="~/css/Prikaz.css">
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterIkona {
+        margin-right: 15px;
+    }
+
+    #grb {
+        height: 40px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    #satnicaTH {
+        width: 82px;
+    }
+
+    #utakmicaTH {
+        width: 370px;
+        text-align: center;
+    }
+
+    #takmicenjeTH {
+        width: 276px;
+    }
+
+    #q {
+        width: 130px;
+    }
+
+    #filterIkona {
+        margin-right: 5px;
+    }
+
+    th {
+        font-size: 15px;
+        text-align: center;
+    }
+
+    td {
+        color: black;
+    }
+
+    .badge {
+        font-size: 12px;
+    }
+</style>
+
+@if (Model.zahtjevi.Count() == 0 && k.isAdmin)
+{
+    <h2>Nemate novih zahtjeva!</h2>
+}
+else @if (Model.zahtjevi.Count() == 0 && !k.isAdmin)
+{
+<h2>Nemate poslanih zahtjeva!</h2>
+}
+else
+{
+<div class="row">
+    <div class="col">
+        @if (k.isAdmin)
+        {
+            <h4>Zaprimljeni zahtjevi</h4>
+        }
+        else
+        {
+            <h4>Poslani zahtjevi</h4>
+        }
+    </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="fa fa-calendar-alt"></i><br />
+                                <span>Datum</span>
+                            </th>
+                            <th>
+                                <i class="fas fa-exclamation-triangle"></i><br />
+                                <span>Prioritet</span>
+                            </th>
+                            <th>
+                                <i class="fa fa-question-circle"></i><br />
+                                <span>Status</span>
+                            </th>
+                            <th>
+                                <i class="fa fa-question-circle"></i><br />
+                                <span>Svrha</span>
+                            </th>
+                            <th>
+                                <i class="fa fa-question-circle"></i><br />
+                                <span>Tip</span>
+                            </th>
+                            @if (k.isAdmin)
+                            {
+                                <th>
+                                    <i class="fas fa-user"></i><br />
+                                    <span>Korisnik</span>
+                                </th>
+                            }
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Model.zahtjevi)
+                        {
+                            <tr>
+                                <td>
+                                    @i.datum
+                                    @if (i.prijeDana == 0)
+                                    {
+                                        <span class="badge badge-info">Danas</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-info">prije @i.prijeDana dana</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (i.prioritet == "Visok")
+                                    {
+                                        <span class="badge badge-danger">@i.prioritet</span>
+                                    }
+                                    @if (i.prioritet == "Srednji")
+                                    {
+                                        <span class="badge badge-warning">@i.prioritet</span>
+                                    }
+                                    @if (i.prioritet == "Nizak")
+                                    {
+                                        <span class="badge badge-secondary">@i.prioritet</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (i.status == "Obrada")
+                                    {
+                                        <span class="badge badge-warning">@i.status</span>
+                                    }
+                                    @if (i.status == "Završen")
+                                    {
+                                        <span class="badge badge-success">@i.status</span>
+                                    }
+                                    @if (i.status == "Odbijen")
+                                    {
+                                        <span class="badge badge-danger">@i.status</span>
+                                    }
+                                </td>
+                                <td>@i.svrha</td>
+                                <td>@i.tip</td>
+                                @if (k.isAdmin)
+                                {
+                                    <td>@i.korisnik</td>
+                                }
+                                <td id="ikonice">
+                                    <a href="#" onclick="prikaziZahtjev(@i.zahtjevID)" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                    @if (k.isAdmin)
+                                    {
+                                        <a href="#" onclick="zavrsiZahtjev(@i.zahtjevID)" class="edit" title="Uredi" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                    }
+                                    @if (i.status == "Obrada" && !k.isAdmin)
+                                    {
+                                        <a href="#" onclick="ponistiZahtjev(@i.zahtjevID)" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        }
+
+        <script>
+            var korisnikID = document.getElementById("korisnikID").innerText;
+            function ponistiZahtjev(zahtjevID) {
+                $(document).ready(function () {
+                    var url = "/Zahtjev/PonistiZahtjev?zahtjevID=" + zahtjevID;
+                    $.get(url, function (d) {
+                        notifikacija("Zahtjev uspješno poništen!")
+                        ucitajZahtjeveKorisnik(korisnikID);
+                        getBrojZahtjeva(korisnikID);
+                    });
+                });
+            }
+            function prikaziZahtjev(zahtjevID) {
+                $(document).ready(function () {
+                    var url = "/Zahtjev/PrikaziDetalje?zahtjevID=" + zahtjevID;
+                    $.get(url, function (d) {
+                        $("#ucitajDetalje").html(d);
+                    });
+                });
+            }
+            function zavrsiZahtjev(zahtjevID) {
+                $(document).ready(function () {
+                    var url = "/Zahtjev/DodajZahtjev?zahtjevID=" + zahtjevID;
+                    $.get(url, function (d) {
+                        $("#ucitajDodajZahtjev").html(d);
+                    });
+                });
+            }
+        </script>

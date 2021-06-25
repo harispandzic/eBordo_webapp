@@ -1,0 +1,46 @@
+﻿@using eBordo_seminarski_rad.ViewModels.Drzava
+@model DrzavaObrisiVM
+@{
+    string poruka = (string)TempData["porukaInfo"];
+}
+
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Brisanje države</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.drzavaID == 0)
+                    {
+                        <p>Da li ste sigurni da želite obrisati sve zapise?</p>
+                    }
+                    else
+                    {
+                        <p>Da li ste sigurni da želite obrisati zapis?</p>
+                    }
+                    <p class="text-danger"><p3>Akcija ne može biti vraćena!</p3></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span id="btnIkona"><i class="fa fa-remove"></i></span>Poništi akciju
+                    </button>
+                    <button type="submit" class="btn btn-danger" onclick="obrisiDrzavu(@Model.drzavaID)">
+                        @if (Model.drzavaID == 0)
+                        {
+                            <span id="btnIkona"><i class="fa fa-check"></i>   Obriši države</span>
+                        }
+                        else
+                        {
+                            <span id="btnIkona"><i class="fa fa-check"></i>   Obriši državu</span>
+                        }
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+﻿@using eBordo.ViewModels.Zahtjev
+@model DetaljiZahtjev
+
+<style>
+    .fa{
+        margin-right:5px;
+    }
+    #podaci1 {
+        margin-right: 5px;
+    }
+    #podatak{
+        color:maroon;
+    }
+</style>
+
+<div class="card card-primary">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <h4>Detalji zahtjeva</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <i class="fa fa-calendar-alt" aria-hidden="true"></i><b><span id="podaci1">Datum:</span></b><span id="podatak">@Model.datum</span><br />
+                <i class="fa fa-question-circle" aria-hidden="true"></i><b><span id="podaci1">Svrha:</span></b><span id="podatak">@Model.svrha</span><br />
+                <i class="fa fa-question-circle" aria-hidden="true"></i><b><span id="podaci1">Tip:</span></b><span id="podatak">@Model.tip</span><br />
+                <i class="fa fa-question-circle" aria-hidden="true"></i><b><span id="podaci1">Status:</span></b><span id="podatak">@Model.status</span><br />
+                <i class="fas fa-exclamation-triangle" aria-hidden="true"></i><b><span id="podaci1">Prioritet:</span></b><span id="podatak">@Model.prioritet</span><br />
+                <i class="fas fa-envelope-open-text" aria-hidden="true"></i><b><span id="podaci1">Odgovor:</span></b><span id="podatak">@Model.odgovor</span><br />
+            </div>
+        </div>
+    </div>
+</div>

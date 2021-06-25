@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Kalendar";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Kalendar</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Početna</a></li>
+                    <li class="breadcrumb-item active">Kalendar</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card card-primary">
+            <div class="card-body p-0">
+                <div style="margin-left:10px;margin-right:10px;" id="calender"></div>
+            </div>
+            <!-- /.card-body -->
+        </div>
+    </div>
+</div>
+
+ 
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print"/>
+ 
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+ 
+    <script>
+        $(document).ready(function () {
+            var events = [];
+            $.ajax({
+                type: "GET",
+                url: "/Događaj/GetEvents",
+                success: function (data) {
+                    $.each(data, function (i, v) {
+                        events.push({
+                            start: moment(v.start),
+                            title: v.subject,
+                            color: v.themeColor
+                        });
+                    })
+ 
+                    GenerateCalender(events);
+                },
+                error: function (error) {
+                    alert('failed');
+                }
+            })
+            $('#calendar').fullCalendar({
+                displayEventTime: false
+            });
+            function GenerateCalender(events) {
+                $('#calender').fullCalendar('destroy');
+                $('#calender').fullCalendar({
+                    plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid'],
+                    contentHeight: 700,
+                    defaultDate: new Date(),
+                    displayEventTime: false,
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay,agenda'
+                    },
+                    themeSystem: 'bootstrap',
+                    eventColor: '#378006',
+                    events: events
+                })
+            }
+        })
+    </script>
+}

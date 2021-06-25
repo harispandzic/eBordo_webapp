@@ -1,0 +1,268 @@
+﻿@using eBordo.ViewModels.Izvještaj
+@model DodajIzmjena
+
+@{ 
+    bool izmjena = (bool)ViewData["izmjena"];
+}
+
+<style>
+    #btnCollapseUp2, #btnCollapseDown2 {
+        float: right;
+    }
+    #colPadding1 {
+        padding-left: 5px;
+        padding-right: 5px;
+        text-align: center;
+    }
+</style>
+<div class="row">
+    <div class="col">
+        <h5 style="color:maroon">Evidentiraj izmjenu</h5>
+    </div>
+    <div class="col" id="DownUp" style="margin-bottom:20px;">
+        <button id="btnCollapseDown2" type="button" class="btn btn-outline-warning btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_down</span></button>
+        <button id="btnCollapseUp2" type="button" class="btn btn-outline-danger btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_up</span></button>
+    </div>
+</div>
+<div class="collapse" id="clps2" style="margin-bottom:10px;">
+    <form id="snimiIzmjena">
+        <input id="utakmicaID2" asp-for="utakmicaID" hidden />
+        <div class="row" style="margin-bottom:5px;">
+            <div class="col-4" style="padding-left:15px;text-align:center;">
+                <img src="https://i.postimg.cc/v81YF8XP/600px-Green-Arrow-Down-svg.png" id="statistikaLogo" /> Igrač IN
+            </div>
+            <div class="col-4" id="colPadding1">
+                <img src="https://i.postimg.cc/m2CTkdvC/600px-Red-Arrow-Down-svg.png" id="statistikaLogo" /> Igrač OUT
+            </div>
+            <div class="col-3" id="colPadding1" style="padding-right:10px;">
+                <img src="https://i.postimg.cc/wMPqTD1h/reason-png-6.png" id="statistikaLogo" /> Razlog izmjene
+            </div>
+            <div class="col" style="margin-right:15px;padding-left:0px;padding-right:0px;">
+                <img src="https://i.postimg.cc/3wpZ84hs/imgbin-computer-icons-clock-time-png.png" id="statistikaLogo"/> Minuta
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:10px;">
+            <div class="col-4" style="padding-left:15px;text-align:center;padding-right:5px;">
+                <input hidden asp-for="izmjenaID" />
+                @if (Model.igracIN != 0 && Model.igracOUT != 0)
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+                        </div>
+                        <select disabled id="selectIgraciIN" class="form-control izmjena" asp-for="igracIN" asp-items="Model.igraciKlupa" required></select>
+                    </div>
+                    <input hidden asp-for="igracIN" />
+                }
+                else
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-arrow-up" aria-hidden="true"></i></span>
+                        </div>
+                        <select id="selectIgraciIN" class="form-control izmjena" asp-for="igracIN" asp-items="Model.igraciKlupa" required></select>
+                    </div>
+                    <input hidden asp-for="igracIN" />
+                }
+            </div>
+            <div class="col-4" id="colPadding1">
+                @if (Model.igracIN != 0 && Model.igracOUT != 0)
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
+                        </div>
+                        <select disabled id="selectIgraciOUT" class="form-control izmjena" asp-for="igracOUT" asp-items="Model.igraciPrvaPostava" required></select>
+                    </div>
+                    <input hidden asp-for="igracOUT" />
+                }
+                else
+                {
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
+                        </div>
+                        <select id="selectIgraciOUT" class="form-control izmjena" asp-for="igracOUT" asp-items="Model.igraciPrvaPostava" required></select>
+                    </div>
+                    <input hidden asp-for="igracOUT" />
+                }
+            </div>
+            <div class="col-3" id="colPadding1" style="padding-right:10px;">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1"><i class="fa fa-question" aria-hidden="true"></i></span>
+                    </div>
+                    <select id="razlog" class="form-control izmjena" asp-for="razlog" asp-items="Model.razlozi" required></select>
+                </div>
+            </div>
+            <div class="col" style="margin-right:15px;padding-left:0px;padding-right:0px;">
+                 <input id="minuta" asp-for="minuta" type="number" class="form-control izmjena" required />
+            </div>
+
+        </div>
+        <div class="row" style="margin-bottom:7px;">
+            <div class="col" style="float:right;">
+                @if (izmjena)
+                {
+                    <button class="btn btn-warning" onclick="SpasiIzmjeneIzmjene()" type="button" style="float:right;">
+                        <span style="margin-right:4px;"><i class="fa fa-check"></i></span> Spasi izmjene
+                    </button>
+                }
+                else
+                {
+                    <button class="btn btn-success" onclick="spasiIzmjenu()" type="button" style="float:right;">
+                        <span style="margin-right:4px;"><i class="fa fa-check"></i></span> Spasi izmjenu
+                    </button>
+                }
+                <button id="odustaniBtn1" class="btn btn-danger" onclick="odustani()" type="button" style="float:right;margin-right:7px;display:none;">
+                    <span style="margin-right:4px;"><i class="fa fa-times"></i></span> Odustani
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div id="getIzmjene"></div>
+    </div>
+</div>
+
+<script>
+    $(".izmjena").change(function () {
+        document.getElementById("odustaniBtn1").style.display = "block";
+    });
+    function odustani() {
+        var utakmicaID = document.getElementById("utakmicaID").value;
+        var url = "/Izvještaj/dodajIzmjenu?utakmicaID=" + utakmicaID;;
+        $.get(url, function (d) {
+            $("#dodajIzmjenu").html(d);
+        });
+    }
+    function SpasiIzmjeneIzmjene() {
+        var minuta = document.getElementById("minuta").value;
+        if (minuta == 0) {
+            notifikacija("Nije evidentirana minuta!");
+            return;
+        }
+        var form = $("#snimiIzmjena");
+        var url = "/Izvještaj/spasiIzmjeneIzmjene";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function (msg) {
+                $(document).ready(function () {
+                    if (msg == "OK") {
+                        var utakmicaID = document.getElementById("utakmicaID").value;
+                        getIzmjene(utakmicaID);
+                        notifikacija("Izmjena uspješno uređena!")
+                        url = "/Izvještaj/dodajIzmjenu?utakmicaID=" + utakmicaID;;
+                        $.get(url, function (d) {
+                            $("#dodajIzmjenu").html(d);
+                        });
+                        url = "/Izvještaj/DodajNastup?utakmicaID=" + utakmicaID;;
+                        $.get(url, function (d) {
+                            $("#dodajNastup").html(d);
+                        });
+                    }
+                });
+            },
+            error: function (msg) {
+                notifikacija("Greška u komunikaciji sa serverom!");
+            }
+        });
+    }
+    $(document).ready(function () {
+        $("#clps2").collapse('show');
+        var utakmicaID = document.getElementById("utakmicaID").value;
+        getIzmjene(utakmicaID);
+        $(document).ready(function () {
+            $("#snimiIzmjena").validate({
+                rules: {
+                    minuta: {
+                        required: true,
+                        min: 1,
+                        max:90
+                    }
+                },
+                messages: {
+                    minuta: {
+                        required: "Obavezno polje!",
+                        min: "Minimalna vrijednost je 1",
+                        max: "Maksimalna vrijednost je 90",
+                    }
+                },
+                errorElement: "em",
+                errorPlacement: function (error, element) {
+                    error.addClass("invalid-feedback");
+                    error.insertAfter(element);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-invalid").removeClass("is-valid");
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).addClass("is-valid").removeClass("is-invalid");
+                }
+            });
+
+        });
+    });
+    function spasiIzmjenu() {
+        var minuta = document.getElementById("minuta").value;
+        if (minuta == 0) {
+            notifikacija("Nije evidentirana minuta!");
+            return;
+        }
+        var utakmicaID = document.getElementById("utakmicaID").value;
+        var form = $("#snimiIzmjena");
+        var url = "/Izvještaj/snimiIzmjenaDodaj";
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function (msg) {
+                $(document).ready(function () {
+                    if (msg == "Sve izmjene su evidentirane!") {
+                        document.getElementById("selectIgraciOUT").disabled = true;
+                        document.getElementById("selectIgraciIN").disabled = true;
+                        document.getElementById("minuta").disabled = true;
+                        document.getElementById("razlog").disabled = true;
+                        notifikacija("Sve izmjene su evidentirane!")
+                    }
+                    if (msg == "OK") {
+                        var utakmicaID = document.getElementById("utakmicaID").value;
+                        getIzmjene(utakmicaID);
+                        url = "/Izvještaj/DodajNastup?utakmicaID=" + utakmicaID;;
+                        $.get(url, function (d) {
+                            $("#dodajNastup").html(d);
+                        });
+                        notifikacija("Izmjena uspješno evidentirana!")
+                    }
+                    url = "/Izvještaj/dodajIzmjenu?utakmicaID=" + utakmicaID;
+                    $.get(url, function (d) {
+                        $("#dodajIzmjenu").html(d);
+                    });
+                    $("#clps2").collapse('show');
+                });
+            },
+            error: function (msg) {
+                notifikacija("Greška u komunikaciji sa serverom!");
+            }
+        });
+    }
+    function getIzmjene(utakmicaID) {
+        $(document).ready(function () {
+            var url = "/Izvještaj/getIzmjene?utakmicaID=" + utakmicaID;
+            $.get(url, function (d) {
+                $("#getIzmjene").html(d);
+            });
+        });
+    }
+    $("#btnCollapseDown2").click(function () {
+        $("#clps2").collapse('show');
+    });
+    $("#btnCollapseUp2").click(function () {
+        $("#clps2").collapse('hide');
+    });
+</script>

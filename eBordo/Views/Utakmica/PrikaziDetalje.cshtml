@@ -1,0 +1,944 @@
+﻿@model eBordo.ViewModels.Utakmica.UtakmicaDetaljiVM
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+<link rel="stylesheet" href="~/css/igracDodaj.css">
+<link rel="stylesheet" href="~/css/igracDetaljiPrikaz.css">
+<script src="~/js/prikaziDetaljeIgrac.js"></script>
+
+<style>
+    #grbKluba1, #grbKluba2 {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 100px;
+    }
+
+    .avatar2 {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    #garnituraKluba {
+        height: 100px;
+    }
+
+    #logo {
+        height: 65px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        margin-top: 25%;
+        right: 16px;
+    }
+
+    #grbH, span {
+        text-align: center;
+    }
+
+    #DownUp {
+        text-align: right;
+    }
+
+    .modal {
+        overflow: scroll;
+    }
+
+    #vrijeme {
+        height: 25px;
+        margin-right: 10px;
+    }
+
+    .avatar {
+        vertical-align: middle;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+    }
+    #btnIzvjestaj{
+        position:absolute;
+        left:285px;
+        bottom:0px;
+    }
+    #statistikaLogo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 30px;
+    }
+    #kolonaSredina {
+        text-align: center;
+    }
+
+    #podatakSpan {
+        color: maroon;
+        font-weight: bold;
+    }
+    #podaci1 {
+        margin-left: 5px;
+    }
+</style>
+
+<div class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Pregled detalja utakmice</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <div style="float:right;">
+                                <img id="grbKluba1" src="~/uploads/@Model.domacinGrb" /><br />
+                                <h5 id="grbH"><b>@Model.domacin</b></h5>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div>
+                                <img id="logo" src="~/uploads/@Model.slikaVrstaTakmicenja" /><br />
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div>
+                                <img id="grbKluba2" src="~/uploads/@Model.gostGrb" /><br />
+                                <h5 id="grbH"><b>@Model.gost</b></h5>
+                            </div>
+                        </div>
+                        <div class="col" style="border-right: 1px solid #D0D0D0">
+                            <img style="height: 120px; margin-right:0px;float:right" src="/uploads/@Model.garnituraDomacin" />
+                            <label style="text-align:center;width: 120px;float:right;">Domaća garnitura</label>
+                        </div>
+                        <div class="col">
+                            <img id="previewGostujuci" style="height: 120px; margin-left:0px;" src="/uploads/@Model.garnituraGost" />
+                            <label style="text-align:center;width: 120px;float:left;">Gostujuća garnitura</label>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-4" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/cH5kPsGS/pngegg-4.png" />
+                            <b>Takmičenje</b>
+                        </div>
+                        <div class="col" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/4ybnXWLV/pngegg-1.png" />
+                            <b>Stadion</b>
+                        </div>
+                        <div class="col-2" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/q7zt2XqH/favpng-calendar-date.png" />
+                            <b>Datum</b>
+                        </div>
+                        <div class="col-2" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/PJbHHpXD/6737541.jpg" />
+                            <b>Satnica</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                <img id="vrijeme" src="~/uploads/@Model.slikaVrstaTakmicenja" />@Model.vrstaTakmicenja <br />
+                            </span>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                @Model.nazivStadiona <img style="height:20px;" src="~/uploads/@Model.zastavicaDrzava" />
+                            </span>
+                        </div>
+                        <div class="col-2 d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                @Model.datumOdigravanja
+                            </span>
+                        </div>
+                        <div class="col-2 d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                @Model.satnica h
+                            </span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row" style="margin-bottom:10px;">
+                        <div class="col" style="padding-right:0px;">
+                            <i class="fa fa-user" aria-hidden="true"></i><b><span id="podaci1">Sudija:</span></b><span id="podatakSpan">@Model.sudija</span><br />
+                            <i class="fa fa-sun-o" aria-hidden="true"></i><b><span id="podaci1">Vrijeme:</span></b>
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Sunčano)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/sunce.png" /><span id="podatakSpan">Sunčano</span><br />
+                            }
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Kiša)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/kiša.png" /><span id="podatakSpan">Kiša</span><br />
+                            }
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Oblačno)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/oblačno.png" /><span id="podatakSpan">Oblačno</span><br />
+                            }
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Snijeg)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/snijeg.png" /><span id="podatakSpan">Snijeg</span><br />
+                            }
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Promjenjivo)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/Promjenjivo.png" /><span id="podatakSpan">Promjenjivo</span><br />
+                            }
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Čisto_Dan)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/čistoDan.png" /><span id="podatakSpan">Čisto (dan) </span><br />
+                            }
+                            @if (Model.vrijeme == Data.EntityModels.Vrijeme.Čisto_Noć)
+                            {
+                                <img id="vrijeme" src="~/Vrijeme/čistoNoć.png" /><span id="podatakSpan">Čisto (noć)</span><br />
+                            }
+                            <i class="fa fa-address-card-o" aria-hidden="true"></i><b><span id="podaci1">Trener:</span></b><img src="~/uploads/@Model.trenerSlika" class="avatar2" alt="Avatar"><span id="podatakSpan">@Model.trener</span><br />
+                            <i class="fa fa-star" aria-hidden="true"></i><b><span id="podaci1">Kapiten:</span></b><img src="~/uploads/@Model.kapitenSlika" class="avatar2" alt="Avatar"><span id="podatakSpan">@Model.kapiten</span><br />
+                            <i class="fa fa-user" aria-hidden="true"></i><b><span id="podaci1">Cijena ulaznice:</span></b><span id="podatakSpan">@Model.cijenaUlanice KM</span><br />
+                            <i class="fa fa-money" aria-hidden="true"></i><b><span id="podaci1">Broj ulaznica:</span></b><span id="podatakSpan">@Model.brojUlaznica</span><br />
+                            <i class="fa fa-sticky-note" aria-hidden="true"></i><b><span id="podaci1">Napomene:</span></b>@Model.napomene
+                            @*<div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+                                </div>
+                                <textarea readonly asp-for="napomene" class="form-control" id="exampleFormControlTextarea4" rows="4"></textarea>
+                            </div>*@
+                            @if (Model.status == Data.EntityModels.StatusUtakmice.odigrana)
+                            {
+                                @*<a onclick="prikaziIzvjestaj(@Model.urakmicaID)"><b>Izvještaj sa utakmice</b></a>*@
+                                <button id="btnIzvjestaj" onclick="prikaziIzvjestaj(@Model.urakmicaID)" type="button" class="btn btn-warning btn-sm"><span style="float:left;" id="spanAcc" class="material-icons">analytics</span><span style="font-size: 17px;">Izvještaj</span></button>
+                            }
+                            <br />
+                        </div>
+                        <div class="col">
+                            <img id="previewStadion" style="width:100%;height: 280px;" src="/uploads/@Model.stadionSlika" />
+                        </div>
+                    </div>
+                    <hr style="margin-top:0px;" />
+                    <div class="row">
+                        <div class="col">
+                            <h5 style="color:maroon">Pozvani igrači</h5>
+                        </div>
+                        <div class="col" id="DownUp">
+                            <button id="btnCollapseUp1" type="button" class="btn btn-outline-danger btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_up</span></button>
+                            <button id="btnCollapseDown1" type="button" class="btn btn-outline-warning btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_down</span></button>
+                        </div>
+                    </div>
+                    <div class="collapse">
+                        <div class="row">
+                            <div class="col">
+                                <img id="terenSlika" src="~/pitch.png" />
+                                <div id="terenDiv">
+                                    <div id="napadac">
+                                        <div class="row">
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.napadac.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.napadac.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @*NAPADAC*@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle"><span id="spanStyle">@Model.napadac.brojDresa|@Model.napadac.prezime</span></span>
+                                                <span hidden class="ocjena">@Model.napadac.ocjena</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="krila">
+                                        <div class="row">
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.lijevoKrilo.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.lijevoKrilo.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.prednjiVezni.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.prednjiVezni.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.desnoKrilo.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.desnoKrilo.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @* LIJEVO KRILO *@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.lijevoKrilo.brojDresa|@Model.lijevoKrilo.prezime</span>
+                                                <span hidden class="ocjena">@Model.lijevoKrilo.ocjena</span>
+                                            </div>
+                                            @* PREDNJI VEZNI *@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.prednjiVezni.brojDresa|@Model.prednjiVezni.prezime</span>
+                                                <span hidden class="ocjena">@Model.prednjiVezni.ocjena</span>
+                                            </div>
+                                            @* DESNO KRILO *@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.desnoKrilo.brojDresa|@Model.desnoKrilo.prezime</span>
+                                                <span hidden class="ocjena">@Model.desnoKrilo.ocjena</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col d-flex justify-content-center">
+                                                <div class="container">
+                                                    <div class="progress">
+                                                        <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col d-flex justify-content-center">
+                                                <div class="container">
+                                                    <div class="progress">
+                                                        <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col d-flex justify-content-center">
+                                                <div class="container">
+                                                    <div class="progress">
+                                                        <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="vezniRed">
+                                        <div class="row">
+                                            <div class="col">
+
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.prviZadnjiVezni.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.prviZadnjiVezni.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.drugiZadnjiVezni.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.drugiZadnjiVezni.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div id="opis" class="col">
+
+                                            </div>
+                                            @* PRVI ZADNJI VEZNI *@
+                                            <div style="padding-left:0px;" id="opis" class="col">
+                                                <span id="spanStyle">@Model.prviZadnjiVezni.brojDresa|@Model.prviZadnjiVezni.prezime</span>
+                                                <span hidden class="ocjena">@Model.prviZadnjiVezni.ocjena</span>
+                                            </div>
+                                            @* DRUGI ZADNJI VEZNI *@
+                                            <div style="padding-left:0px;margin-left:20px;" id="opis" class="col">
+                                                <span id="spanStyle">@Model.drugiZadnjiVezni.brojDresa|@Model.drugiZadnjiVezni.prezime</span>
+                                                <span hidden class="ocjena">@Model.drugiZadnjiVezni.ocjena</span>
+                                            </div>
+                                            <div id="opis" class="col">
+
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col d-flex justify-content-center">
+
+                                            </div>
+                                            <div class="col d-flex justify-content-center">
+                                                <div class="container">
+                                                    <div class="progress">
+                                                        <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col d-flex justify-content-center">
+                                                <div class="container">
+                                                    <div class="progress">
+                                                        <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col d-flex justify-content-center">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="linijaOdbrana">
+                                        <div class="row">
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.lijeviBek.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.lijeviBek.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.prviStoper.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.prviStoper.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.drugiStoper.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.drugiStoper.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.desniBek.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.desniBek.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @*LIJEVI BEK*@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.lijeviBek.brojDresa|@Model.lijeviBek.prezime</span>
+                                                <span hidden class="ocjena">@Model.lijeviBek.ocjena</span>
+                                            </div>
+                                            @*PRVI STOPER*@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.prviStoper.brojDresa|@Model.prviStoper.prezime</span>
+                                                <span hidden class="ocjena">@Model.prviStoper.ocjena</span>
+                                            </div>
+                                            @*DRUGI STOPER*@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.drugiStoper.brojDresa|@Model.drugiStoper.prezime</span>
+                                                <span hidden class="ocjena">@Model.drugiStoper.ocjena</span>
+                                            </div>
+                                            @*DESNI BEK*@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.desniBek.brojDresa|@Model.desniBek.prezime</span>
+                                                <span hidden class="ocjena">@Model.desniBek.ocjena</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center">
+                                            <div class="container">
+                                                <div class="progress">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div class="container">
+                                                <div class="progress">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div class="container">
+                                                <div class="progress">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex justify-content-center">
+                                            <div class="container">
+                                                <div class="progress">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="linijaGolman">
+                                        <div class="row">
+                                            <div class="col">
+                                                @if (Model.vrstaUtakmice == 1)
+                                                {
+                                                    <img onclick="getDetalje(@Model.golman.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                                }
+                                                else
+                                                {
+                                                    <img onclick="getDetalje(@Model.golman.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            @*GOLMAN*@
+                                            <div id="opis" class="col">
+                                                <span id="spanStyle">@Model.golman.brojDresa|@Model.golman.prezime</span>
+                                                <span hidden class="ocjena">@Model.golman.ocjena</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 style="text-decoration: underline;">Prvih 11</h5>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.golman.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.golman.ime <b>@Model.golman.prezime</b>
+                                        @if (Model.kapitenID == Model.golman.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.golman.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.lijeviBek.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.lijeviBek.ime <b>@Model.lijeviBek.prezime</b>
+                                        @if (Model.kapitenID == Model.lijeviBek.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.lijeviBek.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.prviStoper.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.prviStoper.ime <b>@Model.prviStoper.prezime</b>
+                                        @if (Model.kapitenID == Model.prviStoper.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.prviStoper.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.drugiStoper.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.drugiStoper.ime <b>@Model.drugiStoper.prezime</b>
+                                        @if (Model.kapitenID == Model.drugiStoper.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.drugiStoper.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.desniBek.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.desniBek.ime <b>@Model.desniBek.prezime</b>
+                                        @if (Model.kapitenID == Model.desniBek.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.desniBek.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.prviZadnjiVezni.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.prviZadnjiVezni.ime <b>@Model.prviZadnjiVezni.prezime</b>
+                                        @if (Model.kapitenID == Model.prviZadnjiVezni.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.prviZadnjiVezni.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.drugiZadnjiVezni.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.drugiZadnjiVezni.ime <b>@Model.drugiZadnjiVezni.prezime</b>
+                                        @if (Model.kapitenID == Model.drugiZadnjiVezni.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.drugiZadnjiVezni.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.prednjiVezni.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.prednjiVezni.ime <b>@Model.prednjiVezni.prezime</b>
+                                        @if (Model.kapitenID == Model.prednjiVezni.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.prednjiVezni.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.lijevoKrilo.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.lijevoKrilo.ime <b>@Model.lijevoKrilo.prezime</b>
+                                        @if (Model.kapitenID == Model.lijevoKrilo.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.lijevoKrilo.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.desnoKrilo.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.desnoKrilo.ime <b>@Model.desnoKrilo.prezime</b>
+                                        @if (Model.kapitenID == Model.desnoKrilo.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.desnoKrilo.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.napadac.slika" class="avatar" alt="Avatar"> <span id="imePrezime">
+                                        @Model.napadac.ime <b>@Model.napadac.prezime</b>
+                                        @if (Model.kapitenID == Model.napadac.igracID)
+                                        {
+                                            <b id="kapiten">(C)</b>
+                                        }
+                                        <b id="dresIgraca">#@Model.napadac.brojDresa</b>
+                                    </span> <br />
+                                </div>
+                                <hr />
+                                <span>Trener</span>
+                                <div id="igracPopis">
+                                    <img src="~/uploads/@Model.trenerSlika" class="avatar" alt="Avatar"> <span id="imePrezime">Vinko <b>Marinović</b></span> <br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <hr />
+                        <div style="text-align:center;">
+                            <h5 style="text-decoration: underline;">Klupa</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="row" style="margin-bottom:30px;">
+                                    <div class="col">
+                                        @if (Model.vrstaUtakmice == 1)
+                                        {
+                                            <img onclick="getDetalje(@Model.golmanKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                        }
+                                        else
+                                        {
+                                            <img onclick="getDetalje(@Model.golmanKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                        }
+                                        <div id="opis" class="col">
+                                            <span id="spanStyle">@Model.golmanKlupa.brojDresa|@Model.golmanKlupa.prezime</span>
+                                            <span hidden class="ocjena">@Model.golmanKlupa.ocjena</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        @if (Model.vrstaUtakmice == 1)
+                                        {
+                                            <img onclick="getDetalje(@Model.bekKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                        }
+                                        else
+                                        {
+                                            <img onclick="getDetalje(@Model.bekKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                        }
+                                        <div id="opis" class="col">
+                                            <span id="spanStyle">@Model.bekKlupa.brojDresa|@Model.bekKlupa.prezime</span>
+                                            <span hidden class="ocjena">@Model.bekKlupa.ocjena</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        @if (Model.vrstaUtakmice == 1)
+                                        {
+                                            <img onclick="getDetalje(@Model.odbranaKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                        }
+                                        else
+                                        {
+                                            <img onclick="getDetalje(@Model.odbranaKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                        }
+                                        <div id="opis" class="col">
+                                            <span id="spanStyle">@Model.odbranaKlupa.brojDresa|@Model.odbranaKlupa.prezime</span>
+                                            <span hidden class="ocjena">@Model.odbranaKlupa.ocjena</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        @if (Model.vrstaUtakmice == 1)
+                                        {
+                                            <img onclick="getDetalje(@Model.veznjakKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                        }
+                                        else
+                                        {
+                                            <img onclick="getDetalje(@Model.veznjakKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                        }
+                                        <div id="opis" class="col">
+                                            <span id="spanStyle">@Model.veznjakKlupa.brojDresa|@Model.veznjakKlupa.prezime</span>
+                                            <span hidden class="ocjena">@Model.veznjakKlupa.ocjena</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        @if (Model.vrstaUtakmice == 1)
+                                        {
+                                            <img onclick="getDetalje(@Model.kriloKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                        }
+                                        else
+                                        {
+                                            <img onclick="getDetalje(@Model.kriloKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                        }
+                                        <div id="opis" class="col">
+                                            <span id="spanStyle">@Model.kriloKlupa.brojDresa|@Model.kriloKlupa.prezime</span>
+                                            <span hidden class="ocjena">@Model.kriloKlupa.ocjena</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        @if (Model.vrstaUtakmice == 1)
+                                        {
+                                            <img onclick="getDetalje(@Model.napdacKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraDomacin">
+                                        }
+                                        else
+                                        {
+                                            <img onclick="getDetalje(@Model.napdacKlupa.igracID)" id="dres" src="/uploads/@Model.garnituraGost">
+                                        }
+                                        <div id="opis" class="col">
+                                            <span id="spanStyle">@Model.napdacKlupa.brojDresa|@Model.napdacKlupa.prezime</span>
+                                            <span hidden class="ocjena">@Model.napdacKlupa.ocjena</span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="container d-flex justify-content-center">
+                                                <div class="progress" style="width:60px;">
+                                                    <div style="color:black;" class="progress-bar" role="progressbar" aria-valuenow="5" aria-valuemin="0" aria-valuemax="10"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-warning btn-sm"><span style="float:right;" class="material-icons">get_app</span></button>*@
+                <button type="button" class="btn btn-success btn-sm"><span style="float:right;" data-dismiss="modal" class="material-icons">keyboard_backspace</span></button>
+            </div>
+    </div>
+</div>
+</div>
+
+<div id="ajaxDiv1"></div>
+<div id="ajaxDiv2"></div>
+
+<style>
+    #kapiten {
+        color: black;
+        background-color: yellow;
+    }
+
+    #DownUp {
+        text-align: right;
+    }
+
+    #terenSlika {
+        width: 102%;
+        height: 104%;
+    }
+
+    #spanStyle {
+        background-color: maroon;
+        color: white;
+        font-size: 12px;
+    }
+
+    #terenDiv {
+        position: absolute;
+        bottom: 0px;
+        width: 93.5%;
+        height: 100%;
+    }
+
+    #dres {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 70px;
+        filter: drop-shadow(0 0 0.15rem black);
+    }
+
+        #dres:hover {
+            -ms-transform: scale(1.2); /* IE 9 */
+            -webkit-transform: scale(1.2); /* Safari 3-8 */
+            transform: scale(1.2);
+        }
+
+    #opis {
+        text-align: center;
+    }
+
+    #linijaGolman {
+        padding-top: 10px;
+    }
+
+    #linijaOdbrana {
+        padding-top: 5px;
+    }
+
+    #vezniRed {
+        padding-top: 10px;
+    }
+
+    #krila {
+        padding-top: 10px;
+    }
+
+    #napadac {
+        padding-top: 5px;
+    }
+
+    .avatar1 {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 20%;
+    }
+
+    #imePrezime {
+        font-size: 18px;
+    }
+
+    #dresIgraca {
+        float: right;
+        font-size: 18px;
+        color: maroon;
+    }
+
+    #igracPopis {
+        margin-bottom: 5px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        var progressBar = document.getElementsByClassName("progress-bar");
+        var vrijednosti = document.getElementsByClassName("ocjena");
+
+        for (var i = 0; i < vrijednosti.length; i++) {
+            var variable = parseFloat(vrijednosti[i].innerText) * 10;
+            var ocjenaText = vrijednosti[i].innerText;
+            $(progressBar[i]).html(ocjenaText);
+            var unit = "%";
+            var z = variable + unit;
+            $(progressBar[i]).css("width", z);
+            var vrijednost = parseFloat(vrijednosti[i].innerText);
+            if (vrijednost >= 3 && vrijednost < 8) {
+                vrijednosti[i].style.color = "#FFC107";
+                progressBar[i].style.backgroundColor = "#FFC107";
+            }
+            else if (vrijednost >= 8 && vrijednost <= 10) {
+                vrijednosti[i].style.color = "#28A745";
+                progressBar[i].style.backgroundColor = "#28A745";
+            }
+            else {
+                vrijednosti[i].style.color = "#DC3545";
+                progressBar[i].style.backgroundColor = "#DC3545";
+            }
+        }
+    });
+    $(".collapse").collapse('show');
+    function prikaziIzvjestaj(utakmicaID) {
+        $(document).ready(function () {
+            var url = "/Izvještaj/IzvjestajDetalji?utakmicaID=" + utakmicaID;
+            $.get(url, function (d) {
+                $("#ajaxDiv2").html(d);
+                $("#ajaxDiv2").find('.modal').modal('show');
+            });
+        });
+    }
+    function getDetalje(igracID) {
+        $(document).ready(function () {
+            var url = "/Igrac/prikaziDetalje?igracID=" + igracID;
+            $.get(url, function (d) {
+                $("#ajaxDiv1").html(d);
+                $("#ajaxDiv1").find('.modal').modal('show');
+            });
+        });
+    }
+    $("#btnCollapseDown1").click(function () {
+        $(".collapse").collapse('show');
+    });
+    $("#btnCollapseUp1").click(function () {
+        $(".collapse").collapse('hide');
+    });
+    $("#btnCollapseDown").click(function () {
+        $(".collapse").collapse('show');
+    });
+    $("#btnCollapseUp").click(function () {
+        $(".collapse").collapse('hide');
+    });
+</script>

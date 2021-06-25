@@ -1,0 +1,147 @@
+﻿@using eBordo.ViewModels.Notifikacija
+@model NotifikacijeVM
+
+@{
+    bool poruka = (bool)ViewData["poruka"];
+}
+
+<style>
+    #tipNotifikacije {
+        font-size: 30px;
+        margin-right: 10px;
+    }
+
+    #sadrzaj {
+        cursor: context-menu;
+    }
+
+    .tekst {
+        text-align: left;
+        font-size: 25px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="row">
+    <div class="col">
+        @*<span class="dropdown-item dropdown-header">@Model.notifikacije.Count() notifikacija</span>*@
+        @if (poruka)
+        {
+            <span class="tekst"><i style="margin-right:5px;" class="fas fa-paper-plane"></i>Poruke</span>
+        }
+        else
+        {
+            <span class="tekst"><i style="margin-right:5px;" class="fas fa-bell"></i>Obavještenja</span>
+        }
+    </div>
+    <div class="col" style="text-align:right;">
+
+        @if (poruka)
+        {
+            <a href="#" onclick="oznaciSveKaoProcitano('true')" class="success" title="Označi sve kao pročitano" data-toggle="tooltip"><i class="fas fa-check text-success"></i></a>
+        }
+        else
+        {
+            <a href="#" onclick="oznaciSveKaoProcitano('false')" class="success" title="Označi sve kao pročitano" data-toggle="tooltip"><i class="fas fa-check text-success"></i></a>
+        }
+    </div>
+</div>
+
+
+
+
+<div class="row">
+    <div class="col" id="bdy">
+        @if (Model.notifikacije.Count() == 0)
+        {
+            <hr />
+            @if (poruka)
+            {
+                <span class="tekst">Nemate poruka!</span>
+            }
+            else
+            {
+                <span class="tekst">Nemate obavještenja!</span>
+            }
+        }
+        @foreach (var n in Model.notifikacije)
+        {
+            <div class="dropdown-divider"></div>
+            <div class="row">
+                <div class="col-1 align-middle">
+                    @if (n.tipNotifikacije == Data.Data.TipNotifikacije.Obavještenje)
+                    {
+                        <i id="tipNotifikacije" class="fas fa-info-circle mr-2 text-info align-middle"></i>
+                    }
+                    @if (n.tipNotifikacije == Data.Data.TipNotifikacije.Upozorenje)
+                    {
+                        <i id="tipNotifikacije" class="fas fa-exclamation-circle mr-2 text-warning align-middle"></i>
+                    }
+                    @if (n.tipNotifikacije == Data.Data.TipNotifikacije.Greška)
+                    {
+                        <i id="tipNotifikacije" class="fas fa-times-circle mr-2 text-danger align-middle"></i>
+                    }
+                    @if (n.tipNotifikacije == Data.Data.TipNotifikacije.Uspješno)
+                    {
+                        <i id="tipNotifikacije" class="fas fa-check-circle mr-2 text-success align-middle"></i>
+                    }
+                </div>
+                <div class="col" id="sadrzaj">
+                    <div class="row">
+                        <div class="col">
+                            <span>@n.tekstNotifikacije</span>
+                        </div>
+                        <div class="col-1" style="right:10px;">
+                            <a href="#" onclick="oznaciKaoProcitano(@n.notifikacijaID)" class="success" title="Označi kao pročitano" data-toggle="tooltip"><i class="fas fa-check text-success"></i></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <span class="float-left text-muted text-sm"><i style="margin-right:3px;" class="far fa-clock"></i>@n.datumNotifikacije<i style="margin-right:3px;margin-left:7px;" class="fas fa-user"></i>@n.poslao</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    var korisnikID = document.getElementById("korisnikID").innerText;
+
+    function oznaciKaoProcitano(notifikacijaID) {
+        $(document).ready(function () {
+            var url = "/Notifikacija/oznaciKaoProcitana?notifikacijaID=" + notifikacijaID;
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    ucitajNotifikacije(korisnikID);
+                    getBrojNotifikacija(korisnikID);
+                    ucitajPoruke(korisnikID);
+                    getBrojPoruka(korisnikID);
+                }
+            });
+        });
+    }
+    function ucitaj() {
+        ucitajNotifikacije(korisnikID);
+        ucitajPoruke(korisnikID);
+        getBrojNotifikacija(korisnikID);
+        getBrojPoruka(korisnikID);
+    }
+    function oznaciSveKaoProcitano(tip) {
+        $(document).ready(function () {
+            var url = "/Notifikacija/oznaciSveKaoProcitano?korisnikID=" + korisnikID + "&tip=" + tip;
+
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    ucitaj();
+                }
+            });
+        });
+    }
+</script>

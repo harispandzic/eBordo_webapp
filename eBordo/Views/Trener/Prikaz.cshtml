@@ -1,0 +1,289 @@
+﻿@using eBordo.ViewModels.Trener
+@model TrenerPrikaziVM
+@{
+    ViewData["Title"] = "Treneri";
+    int brojac = 1;
+    string poruka = (string)TempData["porukaInfo"];
+    string konfMail = (string)TempData["mailInfo"];
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/jqvmap/jqvmap.min.css">
+<link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/summernote/summernote-bs4.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="~/css/Prikaz.css">
+
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #boja {
+        margin-bottom: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #podatakSpan {
+        font-weight: bold;
+        color: maroon;
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterPozicija {
+        margin-right: 15px;
+    }
+
+    #drzavljanstvoTH {
+        width: 206px;
+    }
+
+    #datumTH {
+        width: 137px;
+    }
+
+    #gradTH {
+        width: 121px;
+    }
+
+    #ocjenaTH {
+        width: 97px;
+    }
+
+    #pozicijaTH {
+        width: 125px;
+    }
+</style>
+
+<body onload="notifikacija('@poruka','@konfMail')">
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.css" rel="stylesheet" />
+    <script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
+    <div id="moj" class="container-xl">
+        <div class="table-responsive-sm">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Home">Početna</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Treneri</li>
+                </ol>
+            </nav>
+            <div class="table-wrapper">
+                <div id="headerDiv" class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Upravljanje <b>trenerima</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            <a href="#" onclick="dodajTrenera()" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Dodaj trenera</span></a>
+                            @*<a href="#" onclick="obrisiIgracaModal(0,@Model.igraci.Count())" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Obriši sve</span></a>*@
+                            @*<a onclick="generisiReport()" class="btn btn-warning"><i style="color:black" class="material-icons">get_app</i> <span style="color:black">Download PDF</span></a>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="table-filter">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <a id="refreshDiv" style="background-color:#510520" onclick="refreshTrenere()" href="#" class="btn btn-default"><i class="material-icons">&#xE863;</i></a>
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="filter-group">
+                                <form>
+                                    <label>Trener</label>
+                                    <input id="q" placeholder="Search..." type="text" class="form-control" value="@Model.q" name="q">
+                                    <button type="submit" style="background-color:#510520" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                            <div id="filterIkona" class="filter-group" style="margin-right:10px;">
+                                <label>Stauts</label>
+                                <select id="filterStatus" onchange="filterStatus()" class="form-control" asp-items="@Model.statusi">
+                                    @if (Model.statusTrenera == null)
+                                    {
+                                        <option>Filter...</option>
+                                    }
+                                    else
+                                    {
+                                        <option style="color:green">@Model.statusTrenera</option>
+                                    }
+                                </select>
+                            </div>
+                            <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#RB</th>
+                            <th>Ime i prezime</th>
+                            <th id="datumTH">Datum rođenja</th>
+                            <th id="drzavljanstvoTH">Državljanstvo</th>
+                            <th id="gradTH">Grad rođenja</th>
+                            <th id="pozicijaTH">Licenca</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (TrenerPrikaziVM.Row i in Model.treneri)
+                        {
+                            <tr>
+                                <td>#<b style="color:maroon;">@brojac</b></td>
+                                <td>
+                                    <img src="~/uploads/@i.slikaTrenera" class="avatar" alt="Avatar">
+                                    @i.ime @i.prezime
+                                </td>
+                                <td>@i.datumRodjenja</td>
+                                <td id="drzavljanstvoTH">
+                                    <img src="~/uploads/@i.drzavaSlika" class="mojaKlasa" alt="Avatar">
+                                    @i.drzavljanstvo
+                                </td>
+                                <td>
+                                    <img src="~/uploads/@i.gradRodjenjaZastava" class="mojaKlasa" alt="Avatar">
+                                    @i.gradRodjenja
+                                </td>
+                                <td id="pozicijaTH">
+                                    @if (i.licenca == Data.EntityModels.TrenerskaLicenca.UEFA_A)
+                                    {
+                                        <span id="boja" class="status text-warning">&bull;</span>
+                                        <span id="podatakSpan">UEFA A</span> <br />
+                                    }
+                                    @if (i.licenca == Data.EntityModels.TrenerskaLicenca.UEFA_B)
+                                    {
+                                        <span id="boja" class="status text-info">&bull;</span>
+                                        <span id="podatakSpan">UEFA B</span> <br />
+                                    }
+                                    @if (i.licenca == Data.EntityModels.TrenerskaLicenca.UEFA_Pro)
+                                    {
+                                        <span id="boja" class="status text-success">&bull;</span>
+                                        <span id="podatakSpan">UEFA Pro</span> <br />
+                                    }
+                                </td>
+                                <td id="ikonice">
+                                    <a href="#" onclick="prikaziDetaljeTrenera(@i.trenerID)" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                    <a href="#" onclick="urediTrener(@i.trenerID)" class="edit" title="Uredi" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                    @if (i.statusTrenera == Data.EntityModels.Status.Aktivan)
+                                    {
+                                        <a href="#" onclick="obrisiTreneraModal(@i.trenerID)" class="delete" title="Archive" data-toggle="tooltip"><i class="material-icons">archive</i></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="#" onclick="odarhivirajTrenera(@i.trenerID)" style="color:#28A745" title="Unarchive" data-toggle="tooltip"><i class="material-icons">unarchive</i></a>
+                                    }
+                                </td>
+                            </tr>
+                            brojac++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+<div id="ajaxDiv"></div>
+
+<script>
+    function dodajTrenera() {
+        $(document).ready(function () {
+            var url = "/Trener/DodajTrenera";
+            $.get(url, function (d) {
+                $("#ajaxDiv").html(d);
+                $("#ajaxDiv").find('.modal').modal('show');
+            });
+        });
+    }
+    function refreshTrenere() {
+        $(document).ready(function () {
+            window.location.href = "/Trener/Prikaz";
+        });
+    }
+    function filterStatus() {
+        $(document).ready(function () {
+            var e = document.getElementById("filterStatus");
+            var result = e.options[e.selectedIndex].text;
+            window.location.href = "/Trener/Prikaz?statusTrenera=" + result;
+        });
+    }
+    function obrisiTreneraModal(trenerID) {
+        $(document).ready(function () {
+            var url = "/Trener/Obrisi?trenerID=" + trenerID;
+            $.get(url, function (d) {
+                $("#ajaxDiv").html(d);
+                $("#ajaxDiv").find('.modal').modal('show');
+            });
+        });
+    }
+    function odarhivirajTrenera(trenerID) {
+        window.location.href = "/Trener/VratiTrenera?trenerID=" + trenerID;
+    }
+    function prikaziDetaljeTrenera(trenerID) {
+        $(document).ready(function () {
+            var url = "/Trener/prikaziDetalje?trenerID=" + trenerID;
+            $.get(url, function (d) {
+                $("#ajaxDiv").html(d);
+                $("#ajaxDiv").find('.modal').modal('show');
+            });
+        });
+    }
+    //-------------------------------------------------------------
+    function urediTrener(trenerID) {
+        $(document).ready(function () {
+            var url = "/Trener/UrediTrenera?trenerID=" + trenerID;
+            $.get(url, function (d) {
+                $("#ajaxDiv").html(d);
+                $("#ajaxDiv").find('.modal').modal('show');
+            });
+        });
+    }
+
+    function obrisiIgraca(igracID) {
+        $(document).ready(function () {
+            window.location.href = "/Igrac/ObrisiSnimi?igracID=" + igracID;
+        });
+    }
+
+
+    function filterDrzava() {
+        $(document).ready(function () {
+            var e = document.getElementById("filterDrzava");
+            var result = e.options[e.selectedIndex].text;
+            window.location.href = "/Igrac/Prikaz?nazivDrzave=" + result;
+        });
+    }
+    function filterPozicija() {
+        $(document).ready(function () {
+            var e = document.getElementById("filterPozicija");
+            var result = e.options[e.selectedIndex].text;
+            window.location.href = "/Igrac/Prikaz?nazivPozicije=" + result;
+        });
+    }
+
+
+
+    //-------------------------------------------------------------------------------------------------------------------
+</script>

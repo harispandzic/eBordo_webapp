@@ -1,0 +1,51 @@
+﻿@page
+@model LoginWithRecoveryCodeModel
+@{
+    ViewData["Title"] = "Potvrda koda za oporavak";
+}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+<link href="/css/login.css" rel="stylesheet">
+
+
+<body>
+    <div class="form-container sign-in-container">
+        <form id="account" method="post">
+            <div class="row">
+                <div class="col">
+                    <img id="grbSarajevo" src="https://i.postimg.cc/ZRD2x9M8/sarajevo.png" />
+                </div>
+            </div>
+            <h2>Provjera koda za oporavak</h2>
+            <span>Unesite kod za oporavak</span>
+            <div class="input-group mb-3">
+                <input asp-for="Input.RecoveryCode" class="form-control" autocomplete="off" />
+                <div class="input-group-append">
+                    <div class="input-group-text" style="height:38px;margin-top:8px;">
+                        <span class="fas fa-check-circle"></span>
+                    </div>
+                </div>
+            </div>
+            <span asp-validation-for="Input.RecoveryCode" class="text-danger"></span>
+            <button type="submit">Prijavi se</button>
+        </form>
+    </div>
+    <div class="overlay-container" id="desnaPozadina">
+        <div class="overlay">
+        </div>
+    </div>
+</body>
+
+
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

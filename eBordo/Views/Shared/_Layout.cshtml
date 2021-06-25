@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | eBordo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        body::after {
+            background: url('https://cdn.oslobodjenje.ba/images/slike/sport1_import/192343/215928.jpg');
+            background-position: center;
+            background-size: 100%;
+            content: "";
+            background-repeat: no-repeat;
+            opacity: 0.2;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="margin-bottom:120px;margin-top:120px;">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/signalR.js" asp-append-version="true"></script>
+    <script src="https://wrd.app.fit.ba/2018-19/fit-messagebox.js"></script>
+    @RenderSection("Scripts", required: false)
+
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.css" rel="stylesheet" />
+    <script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
+
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

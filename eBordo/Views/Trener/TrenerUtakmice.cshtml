@@ -1,0 +1,121 @@
+﻿@using eBordo.ViewModels.Trener
+@model TrenerUtakmiceVM
+@{
+    ViewBag.Title = "Trener utakmice";
+}
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterIkona {
+        margin-right: 15px;
+    }
+
+    #grb {
+        height: 40px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    #satnicaTH {
+        width: 82px;
+    }
+
+    #utakmicaTH {
+        width: 370px;
+        text-align: center;
+    }
+
+    #takmicenjeTH {
+        width: 276px;
+    }
+
+    #q {
+        width: 130px;
+    }
+
+    #filterIkona {
+        margin-right: 5px;
+    }
+
+    .izvjestajProgressBar {
+        background-color: #28a745;
+    }
+
+
+    #igracUtakmice {
+        width: 250px;
+    }
+
+    #boja {
+        margin-bottom: 10px;
+    }
+</style>
+
+<div class="row">
+    <div class="col">
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th id="satnicaTH">Rezultat</th>
+                    <th id="utakmicaTH">Utakmica</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (TrenerUtakmiceVM.Row i in Model.utakmice)
+                {
+                    <tr>
+                        <td>
+                            @i.datum.ToString("dd.MM.yyyy")<br />
+                            <span class="badge badge-warning">prije @i.odigranaDani dana</span>
+                        </td>
+                        <td>
+                            @if (i.rezultat == Data.EntityModels.Rezultat.Pobjeda)
+                            {
+                                <span id="boja" class="status text-success">&bull;</span>
+                                <span>@i.goloviDomaci : @i.goloviGosti</span>
+                                <span class="badge badge-success">Pobjeda</span>
+                            }
+                            @if (i.rezultat == Data.EntityModels.Rezultat.Poraz)
+                            {
+                                <span id="boja" class="status text-danger">&bull;</span>
+                                <span>@i.goloviDomaci : @i.goloviGosti</span>
+                                <span class="badge badge-danger">Poraz</span>
+                            }
+                            @if (i.rezultat == Data.EntityModels.Rezultat.Nerješeno)
+                            {
+                                <span id="boja" class="status text-secondary">&bull;</span>
+                                <span>@i.goloviDomaci : @i.goloviGosti</span>
+                                <span class="badge badge-secondary">Nerješeno</span>
+                            }
+                        </td>
+                        <td id="utakmicaTH">
+                            <div>
+                                @i.domacin <img id="grb" src="~/uploads/@i.domacinGrb" /> <img style="padding-right:5px; padding-left:5px; height:30px;" src="/uploads/@i.vrstaTakmicenjaSlika" /><img id="grb" src="~/uploads/@i.gostGrb" />@i.gost<br />
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

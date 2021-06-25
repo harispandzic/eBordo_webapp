@@ -1,0 +1,153 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    ViewData["Title"] = "Pošalji zahtjev";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<style>
+    #iStatistika {
+        margin-right: 5px;
+        font-size: 15px;
+    }
+
+    .card-header {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ocjenaOpis {
+        font-size: 13px;
+        color: black;
+    }
+
+    #ribonBoja {
+        background-color: #BEBEBE;
+    }
+</style>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Pošalji zahtjev</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Početna</a></li>
+                    <li class="breadcrumb-item active">Pošalji zahtjev</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<span hidden id="isAdmin">@k.isAdmin</span>
+
+<form id="slanjePoruke">
+    <div style="margin-left:10px;margin-right:10px;" class="row">
+        <div class="col">
+            <div class="row">
+                @if (k.isAdmin)
+                {
+                    <div class="col">
+                        <div class="card card-primary">
+                            <div class="card-body">
+                                <div id="ucitajZahtjeveAdmin"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-5">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <div id="ucitajDodajZahtjev"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div id="ucitajDetalje"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (k.isAdmin)
+                {
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card card-primary">
+                                    <div class="card-body">
+                                        <div id="ucitajDodajZahtjev"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div id="ucitajDetalje"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="col">
+                        <div class="card card-primary">
+                            <div class="card-body">
+                                <div id="ucitajZahtjeveKorisnik"></div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</form>
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    var korisnikID = document.getElementById("korisnikID").innerText;
+    var isAdmin = document.getElementById("isAdmin").innerText;
+    $(document).ready(function () {
+        if (isAdmin == "False") {
+            ucitajDodajZahtjev();
+            ucitajZahtjeveKorisnik(korisnikID);
+        }
+        else {
+            ucitajZahtjeve();
+        }
+    });
+    function ucitajZahtjeve() {
+        $(document).ready(function () {
+            var url = "/Zahtjev/Prikaz";
+            $.get(url, function (d) {
+                $("#ucitajZahtjeveAdmin").html(d);
+            });
+        });
+    }
+    function ucitajZahtjeveKorisnik(korisnikID) {
+        $(document).ready(function () {
+            var url = "/Zahtjev/Prikaz?korisnikID=" + korisnikID;
+            $.get(url, function (d) {
+                $("#ucitajZahtjeveKorisnik").html(d);
+            });
+        });
+    }
+    function ucitajDodajZahtjev() {
+        $(document).ready(function () {
+            var url = "/Zahtjev/DodajZahtjev";
+            $.get(url, function (d) {
+                $("#ucitajDodajZahtjev").html(d);
+            });
+        });
+    }
+</script>

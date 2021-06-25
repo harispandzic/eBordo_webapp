@@ -1,0 +1,65 @@
+﻿@page
+@model LoginWith2faModel
+@{
+    ViewData["Title"] = "2FA Prijava";
+}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+<link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+<link href="/css/login.css" rel="stylesheet">
+
+<body style="margin-top:0px;">
+    <div class="form-container sign-in-container" id="ajaxTijelo">
+        <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+            <div class="row">
+                <div class="col">
+                    <img id="grbSarajevo" src="https://i.postimg.cc/ZRD2x9M8/sarajevo.png" />
+                </div>
+            </div>
+            <h1>2FA Prijava</h1>
+            <span>Unesite kod za prijavu</span>
+            <div class="input-group mb-3">
+                <div class="input-group-append">
+                    <input asp-for="Input.TwoFactorCode" class="form-control" autocomplete="off" />
+                    <div class="input-group-text" style="height:38px;margin-top:8px;">
+                        <span class="fas fa-check-circle"></span>
+                    </div>
+                </div>
+            </div>
+            <span asp-validation-for="Input.TwoFactorCode" class="text-danger"></span>
+            <span style="margin-top:10px;margin-bottom:20px;color:black;font-size:14px;">
+                Nemate pristup uređaju za provjeru autentičnosti? Možete
+                <a id="recovery-code-login" asp-page="./LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl"> se prijaviti uz pomoć koda za oporavak!</a>.
+            </span>
+            <button type="submit">Prijavi se</button>
+        </form>
+    </div>
+    <div class="overlay-container" id="desnaPozadina">
+        <div class="overlay">
+        </div>
+    </div>
+</body>
+
+
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+<script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script>
+    function zaboravljenaLozinkaAjax() {
+        $(document).ready(function () {
+            var url = "/Identity/Account/LoginWithRecoveryCode?returnUrl=%2F";
+            $.get(url, function (d) {
+                $("#ajaxTijelo").empty();
+                $("#ajaxTijelo").html(d);
+            });
+        });
+    }
+</script>

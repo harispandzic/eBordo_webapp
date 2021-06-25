@@ -1,0 +1,172 @@
+﻿@using eBordo.ViewModels.Zahtjev
+@model DodajZahtjevVM
+@using eBordo.Helper
+@using Data.EntityModels
+@{
+    //var uredi = (bool)TempData["uredi"];
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+}
+
+<div class="row">
+    <div class="col">
+        <form id="snimiZahtjev">
+            <input id="zahtjevID" hidden asp-for="zahtjevID" />
+            <div class="row" id="statistika">
+                <div class="col" style="margin-top:8px;">
+                    <label>Datum</label>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                        </div>
+                        <input readonly asp-for="datum" type="date" class="form-control" required><br>
+                    </div>
+                </div>
+                <div class="col">
+                    @if (k.isAdmin)
+                    {
+                        <label style="margin-top:8px;">Svrha zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <select disabled id="izbor" class="form-control" asp-for="svrhaID" asp-items="Model.svrhe"></select><br>
+                        </div>
+                    }
+                    else
+                    {
+                        <label style="margin-top:8px;">Svrha zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <select id="izbor" class="form-control" asp-for="svrhaID" asp-items="Model.svrhe" required></select><br>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    @if (k.isAdmin)
+                    {
+                        <label style="margin-top:8px;">Tip zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <select disabled id="izbor" class="form-control" asp-for="tipID" asp-items="Model.tipoviZahtjeva"></select><br>
+                        </div>
+                    }
+                    else
+                    {
+                        <label style="margin-top:8px;">Tip zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <select id="izbor" class="form-control" asp-for="tipID" asp-items="Model.tipoviZahtjeva" required></select><br>
+                        </div>
+                    }
+                </div>
+                <div class="col">
+                    @if (k.isAdmin)
+                    {
+                        <label style="margin-top:8px;">Prioritet zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope"></i></span>
+                            </div>
+                            <select disabled id="izbor" class="form-control" asp-for="prioritetID" asp-items="Model.prioriteti"></select><br>
+                        </div>
+                    }
+                    else
+                    {
+                        <label style="margin-top:8px;">Prioritet zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-exclamation-triangle"></i></span>
+                            </div>
+                            <select id="izbor" class="form-control" asp-for="prioritetID" asp-items="Model.prioriteti"></select><br>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    @if (k.isAdmin)
+                    {
+                        <label style="margin-top:8px;">Status zahtjeva</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-question-circle"></i></span>
+                            </div>
+                            <select id="izbor" class="form-control" asp-for="statusID" asp-items="Model.statusiZahtjeva"></select><br>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    @if (k.isAdmin)
+                    {
+                        <label for="exampleFormControlTextarea4">Odgovor</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fas fa-envelope-open-text" aria-hidden="true"></i></span>
+                            </div>
+                            <textarea placeholder="Odgovor" asp-for="odgovor" class="form-control" id="exampleFormControlTextarea4" rows="3" required></textarea>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    @if (k.isAdmin)
+                    {
+                        <button onclick="spasiZahtjev()" style="float:right;" type="button" class="btn btn-warning">
+                            <span id="btnIkona"><i class="fa fa-paper-plane"></i></span> Zaključi zahtjev
+                        </button>
+                    }
+                    else
+                    {
+                        <button onclick="spasiZahtjev()" style="float:right;" type="button" class="btn btn-success">
+                            <span id="btnIkona"><i class="fa fa-paper-plane"></i></span> Pošalji zahtjev
+                        </button>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var korisnikID = document.getElementById("korisnikID").innerText;
+    function spasiZahtjev() {
+        var form = $("#snimiZahtjev");
+
+        var url = "/Zahtjev/spasiZahtjev";
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function (msg) {
+                if (msg == "Dodan") {
+                    ucitajDodajZahtjev();
+                    ucitajZahtjeveKorisnik(korisnikID);
+                    getBrojZahtjeva(korisnikID);
+                    notifikacija("Uspješno ste poslali zahtjev!");
+                }
+                else {
+                    $("#ucitajDodajZahtjev").empty();
+                    ucitajZahtjeve();
+                    getBrojZahtjeva();
+                    notifikacija("Uspješno ste zaključili zahtjev!");
+                }
+
+            },
+            error: function (msg) {
+                notifikacija("Greška u komunikaciji sa serverom!");
+            }
+        });
+    }
+</script>

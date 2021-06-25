@@ -1,0 +1,46 @@
+﻿@using eBordo.ViewModels.Igrac
+@model IgracObrisiVM
+@{
+    string poruka = (string)TempData["porukaInfo"];
+}
+
+<link rel="stylesheet" href="~/css/UrediDodajObrisi.css">
+
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Arhiviranje igrača</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    @if (Model.igracID == 0)
+                    {
+                        <p>Da li ste sigurni da želite obrisati sve zapise?</p>
+                    }
+                    else
+                    {
+                        <p>Da li ste sigurni da želite arhivirati zapis?</p>
+                    }
+                    <p class="text-danger"><p3>Akcija može biti vraćena!</p3></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <span id="btnIkona"><i class="fa fa-remove"></i></span>Poništi akciju
+                    </button>
+                    <button type="submit" class="btn btn-danger" onclick="obrisiIgraca(@Model.igracID)">
+                        @if (Model.igracID == 0)
+                        {
+                            <span id="btnIkona"><i class="fa fa-check"></i>   Obriši igrače</span>
+                        }
+                        else
+                        {
+                            <span id="btnIkona"><i class="fa fa-check"></i>   Arhiviraj igrača</span>
+                        }
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

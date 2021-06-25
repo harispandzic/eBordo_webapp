@@ -1,0 +1,220 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    ViewBag.Title = "Statistika";
+}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<style>
+    #iStatistika {
+        margin-right: 5px;
+        font-size: 15px;
+    }
+
+    .card-header {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+    #ocjenaOpis{
+        font-size:13px;
+        color:black;
+    }
+    #ribonBoja {
+        background-color: #BEBEBE;
+    }
+</style>
+<span hidden id="igracID">@k.igracID</span>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Statistika igrača</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Početna</a></li>
+                    <li class="breadcrumb-item active">Statistika igrača</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+<div style="margin-left:10px;margin-right:10px;" class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Statistika</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="ucitajDetaljnuStatistiku"></div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Grafički prikaz statistike</h3>
+                    </div>
+                    <div class="card-body">
+                        <div Style="font-family: Corbel; font-size: small ;text-align:center " class="row">
+                            <div style="width:100%;height:40%">
+                                <canvas id="myChart" style="padding: 0;margin: auto;display: block; "> </canvas>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title"><i id="iStatistika" class="fas fa-chart-line nav-icon"></i>Statistika sa zadnje utakmice</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="ucitajZadnjuStatistiku"></div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="ribonBoja" class="position-relative p-3" style="height: 285px">
+                    <div class="ribbon-wrapper ribbon-lg">
+                        <div class="ribbon bg-success text-md">
+                            Zadovoljava
+                        </div>
+                    </div>
+                    <div id="zadovoljava"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div id="ribonBoja" class="position-relative p-3" style="height: 285px">
+                    <div class="ribbon-wrapper ribbon-lg">
+                        <div class="ribbon bg-danger text-md">
+                            Popraviti
+                        </div>
+                    </div>
+                    <div id="popraviti"></div>
+                </div>
+            </div>
+            <div class="col">
+                <div id="ribonBoja" class="position-relative p-3" style="height: 285px">
+                    <div class="ribbon-wrapper ribbon-lg">
+                        <div class="ribbon bg-warning text-md">
+                            Prosjek
+                        </div>
+                    </div>
+                    <div id="prosjek"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var igracID = parseInt(document.getElementById("igracID").innerText);
+        getStatistika(igracID);
+        getzadnjaStatistika(igracID);
+        ucitajChart(igracID);
+        pregledOcjena(igracID);
+    });
+    function pregledOcjena(igracID) {
+        var ocjene = [];
+        $.ajax({
+            type: "POST",
+            url: "/Igrac/pregledOcjena?igracID=" + igracID,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].status == "Zadovoljava") {
+                        document.getElementById("zadovoljava").innerHTML += "<span id='ocjenaOpis'><i class='fas fa-check-circle text-success'></i>" + data[i].opisOcjene + "</span></br>";
+                    }
+                    if (data[i].status == "Prosjek") {
+                        document.getElementById("prosjek").innerHTML += "<span id='ocjenaOpis'><i class='fas fa-check-circle text-warning'></i>" + data[i].opisOcjene + "</span></br>";
+                    }
+                    if (data[i].status == "Popraviti") {
+                        document.getElementById("popraviti").innerHTML += "<span id='ocjenaOpis'><i class='fas fa-times-circle text-danger'></i>" + data[i].opisOcjene + "</span></br>";
+                    }
+                }
+            }
+        });
+        for (var i = 0; i < ocjene.length; i++) {
+            alert(ocjene[i].ocjena);
+        }
+    }
+    function ucitajChart(igracID) {
+        $.ajax({
+            type: "POST",
+            url: "/Igrac/NewChart?igracID=" + igracID,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (chData) {
+                var aData = chData;
+                var aLabels = aData[0];
+                var aDatasets1 = aData[1];
+                var dataT = {
+                    labels: aLabels,
+                    datasets: [{
+                        label: "Ocjena",
+                        data: aDatasets1,
+                        fill: false,
+                        backgroundColor: ["#9F1B19", "#E17646", "#DBBE5E", "#9CC062", "#549F7A", "#349DB4", "#3A8BC2", "#5260A9", "#724D8C", "#AF69A0", "#B5B6B6", "#A11F1D",],
+                        borderColor: ["#9F1B19", "#E17646", "#DBBE5E", "#9CC062", "#549F7A", "#349DB4", "#3A8BC2", "#5260A9", "#724D8C", "#AF69A0", "#B5B6B6", "#A11F1D",],
+                        borderWidth: 1
+                    }]
+                };
+                var ctx = $("#myChart").get(0).getContext("2d");
+                var myNewChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: dataT,
+                    options: {
+                        responsive: true,
+                        title: { display: true, text: 'Skilovi igrača' },
+                        legend: { position: 'bottom' },
+                        scales: {
+                            xAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' } }],
+                            yAxes: [{ gridLines: { display: false }, display: true, scaleLabel: { display: false, labelString: '' }, ticks: { stepSize: 2, beginAtZero: true } }]
+                        },
+                    }
+                });
+            }
+        });
+    }
+    function getStatistika(igracID) {
+        $(document).ready(function () {
+            var url = "/Igrac/statistikaIndex?igracID=" + igracID;
+            $.get(url, function (d) {
+                $("#ucitajDetaljnuStatistiku").html(d);
+            });
+        });
+    }
+    function getzadnjaStatistika(igracID) {
+        $(document).ready(function () {
+            var url = "/Izvještaj/getZadnjaStatistika?igracID=" + igracID;
+            $.get(url, function (d) {
+                $("#ucitajZadnjuStatistiku").html(d);
+            });
+        });
+    }
+</script>

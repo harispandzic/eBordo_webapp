@@ -1,0 +1,23 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    if (k == null)
+    {
+        Layout = "_Layout";
+    }
+    else {
+        if (k.isAdmin)
+        {
+            Layout = "_Layout_admin";
+        }
+        if (k.isIgrac)
+        {
+            Layout = "_Layout_igrac";
+        }
+        if (k.isTrener)
+        {
+            Layout = "_Layout_trener";
+        }
+    }
+}

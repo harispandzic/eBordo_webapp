@@ -1,0 +1,298 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    ViewBag.Title = "Početna";
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | Project Edit</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+    <style>
+        #iStatistika {
+            margin-right: 5px;
+            font-size: 15px;
+        }
+
+        .card-header {
+            background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+        }
+    </style>
+</head>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">Dobrodošao, @k.imePrezime!</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<body>
+    <span hidden id="trenerID">@k.trenerID</span>
+    <section style="margin-left:10px;margin-right:10px;" class="content">
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div id="ucitajLicnePodatke"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box bg-success">
+                            <span class="info-box-icon"><i class="fas fa-check"></i></span>
+                            <div class="info-box-content">
+                                <div id="ucitajPosljednjuUtakmicu"></div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="info-box bg-warning">
+                            <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
+                            <div class="info-box-content">
+                                <div id="ucitajNadolazecuUtakmicu"></div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info"><i class="fas fa-running"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Naredni trening</span>
+                                <span id="treningDays" class="info-box-number"></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info"><i class="far fa-futbol"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Naredna utakmica</span>
+                                <span id="utakmicaDays" class="info-box-number"></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger"><i class="fas fa-file-contract"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Istek ugovora</span>
+                                <span id="istekUgovora" class="info-box-number"></span>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-warning"><i class="fas fa-chart-line"></i></span>
+                            <div class="info-box-content">
+                                <div class="row">
+                                    <div class="col">
+                                        <span class="info-box-text">Pobjede</span>
+                                        <span id="pobjede" class="info-box-number"></span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="info-box-text">Porazi</span>
+                                        <span id="porazi" class="info-box-number"></span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="info-box-text">Nerješeno</span>
+                                        <span id="nerjeseno" class="info-box-number"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="card card-primary">
+                            <div class="card-body p-0">
+                                <div style="margin-left:10px;margin-right:10px;" id="calender"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/AdminLTE/dist/js/adminlte.min.js"></script>
+    <script src="/AdminLTE/dist/js/demo.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+
+
+</body>
+</html>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var events = [];
+            $.ajax({
+                type: "GET",
+                url: "/Događaj/GetEvents",
+                success: function (data) {
+                    $.each(data, function (i, v) {
+                        events.push({
+                            start: moment(v.start),
+                            title: v.subject,
+                            color: v.themeColor
+                        });
+                    })
+
+                    GenerateCalender(events);
+                },
+                error: function (error) {
+                    alert('failed');
+                }
+            })
+            $('#calendar').fullCalendar({
+                displayEventTime: false
+            });
+            function GenerateCalender(events) {
+                $('#calender').fullCalendar('destroy');
+                $('#calender').fullCalendar({
+                    plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid'],
+                    contentHeight: 432,
+                    defaultDate: new Date(),
+                    displayEventTime: false,
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay,agenda'
+                    },
+                    themeSystem: 'bootstrap',
+                    eventColor: '#378006',
+                    events: events
+                })
+            }
+        })
+    </script>
+}
+
+
+
+<script>
+    $(document).ready(function () {
+        var trenerID = parseInt(document.getElementById("trenerID").innerText);
+        getZadnjaUtakmica();
+        getNadolazecaUtakmica();
+        getDaysTrening();
+        getDaysUtakmica();
+        getLicniPodaci(trenerID);
+        getIstekUgovora(trenerID);
+        getMiniStatistika(trenerID);
+    });
+    function getMiniStatistika(trenerID) {
+        var url = "/Trener/getMiniStatistika?trenerID=" + trenerID;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                document.getElementById("pobjede").innerHTML = data[0];
+                document.getElementById("porazi").innerHTML = data[1];
+                document.getElementById("nerjeseno").innerHTML = data[2];
+            }
+        });
+    }
+    function getDaysTrening() {
+        var url = "/Trening/getDays";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                if (data.dani == 0) {
+                    document.getElementById("treningDays").style.color = "maroon";
+                    document.getElementById("treningDays").innerHTML += "Trening je danas u " + data.satnica + "h!";
+                }
+                else {
+                    document.getElementById("treningDays").innerHTML += "za " + data.dani + " dana";
+                }
+            }
+        });
+    }
+    function getDaysUtakmica() {
+        var url = "/Utakmica/getDays";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                if (data.dani == 0) {
+                    document.getElementById("utakmicaDays").style.color = "maroon";
+                    document.getElementById("utakmicaDays").innerHTML += "Utakmica je danas u " + data.satnica + "h!";
+                }
+                else {
+                    document.getElementById("utakmicaDays").innerHTML += "za " + data.dani + " dana";
+                }
+            }
+        });
+    }
+    function getIstekUgovora(trenerID) {
+        var url = "/Trener/getUgovor?trenerID=" + trenerID;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                document.getElementById("istekUgovora").innerHTML += "za " + data + " dana";
+            }
+        });
+    }
+    function getZadnjaUtakmica() {
+        $(document).ready(function () {
+            var url = "/Utakmica/getZadnjaUtakmica";
+            $.get(url, function (d) {
+                $("#ucitajPosljednjuUtakmicu").html(d);
+            });
+        });
+    }
+    function getNadolazecaUtakmica() {
+        $(document).ready(function () {
+            var url = "/Utakmica/getNadolazecaUtakmica";
+            $.get(url, function (d) {
+                $("#ucitajNadolazecuUtakmicu").html(d);
+            });
+        });
+    }
+    function getLicniPodaci(trenerID) {
+        $(document).ready(function () {
+            var url = "/Account/getTrenerPodaci?trenerID=" + trenerID;
+            $.get(url, function (d) {
+                $("#ucitajLicnePodatke").html(d);
+            });
+        });
+    }
+</script>

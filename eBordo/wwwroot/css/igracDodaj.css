@@ -1,0 +1,31 @@
+.row {
+	display: flex;
+}
+
+.column {
+	flex: 25%;
+	margin: 16px 16px;
+	padding: 0px;
+}
+
+.col-5 {
+	left: 7px;
+	top: 13px;
+	margin-right: 3px;
+}
+
+.col {
+	padding-right: 11px;
+}
+
+#rowIgrac {
+	margin-top: -20px;
+}
+
+#slikaWatermark {
+	position: absolute;
+	height: 650px;
+	opacity: 0.1;
+	margin-left: 19%;
+	margin-top: 10%;
+}

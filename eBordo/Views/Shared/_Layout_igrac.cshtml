@@ -1,0 +1,427 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | eBordo</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="/AdminLTE/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="/AdminLTE/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="/AdminLTE/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <link rel="stylesheet" href="/AdminLTE/plugins/jqvmap/jqvmap.min.css">
+    <link rel="stylesheet" href="/AdminLTE/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <link rel="stylesheet" href="/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="/AdminLTE/plugins/summernote/summernote-bs4.min.css">
+
+    <style>
+        body::after {
+            background: url('https://cdn.oslobodjenje.ba/images/slike/sport1_import/192343/215928.jpg');
+            background-position: center;
+            background-size: 100%;
+            content: "";
+            background-repeat: no-repeat;
+            opacity: 0.2;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            position: absolute;
+            z-index: -1;
+        }
+
+
+        .fas {
+            margin-right: 5px;
+        }
+        #divNotifikacije{
+            right:130px;
+            top:47px;
+            width:422px;
+            padding:10px 10px 10px 10px;
+        }
+        #brojNotifikacija{
+            font-size:10px;
+            position:relative;
+            top:10px;
+            left:5px;
+        }
+        #notifications {
+            position: relative;
+            bottom: 15px;
+        }
+        #divPoruke {
+            right: 180px;
+            top: 47px;
+            width: 422px;
+            padding: 10px 10px 10px 10px;
+        }
+
+        #brojPoruka {
+            font-size: 10px;
+            position: relative;
+            top: 10px;
+            left: 5px;
+        }
+
+        #poruke {
+            position: relative;
+            bottom: 15px;
+        }
+    </style>
+</head>
+<body class="sidebar-mini layout-fixed sidebar-closed">
+    <div class="wrapper">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light" id="navigation">
+            <ul class="navbar-nav flex-grow-1">
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i>Početna</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Utakmica" asp-action="Prikaz"><i class="fas fa-calendar-alt"></i>Raspored utakmica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Izvještaj" asp-action="Prikaz"><i class="fas fa-check"></i>Odigrane utakmice</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Trening" asp-action="Index"><i class="fas fa-running"></i>Raspored treninga</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Događaj" asp-action="Kalendar"><i class="fas fa-calendar-alt"></i>Kalendar</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto" id="navI">
+                <li class="nav-item" id="navN">
+                    <div id="poruke">
+                        <a class="nav-link" href="#" onclick="showMePoruka()">
+                            <span id="brojPoruka" class="badge badge-danger" style="display:block;"></span>
+                            <i class="far fa-comments"></i>
+                        </a>
+                    </div>
+                    <div id="divPoruke" class="dropdown-menu  dropdown-menu-right show" style="display:none;">
+
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto" id="navI">
+                <li class="nav-item" id="navN">
+                    <div id="notifications">
+                        <a class="nav-link" href="#" onclick="showMe()">
+                            <span id="brojNotifikacija" class="badge badge-warning" style="display:block;"></span>
+                            <i class="far fa-bell"></i>
+                        </a>
+                    </div>
+                    <div id="divNotifikacije" class="dropdown-menu  dropdown-menu-right show" style="display:none;">
+
+                    </div>
+                </li>
+            </ul>
+            <partial name="_LoginPartial" />
+            <span hidden id="korisnikID">@k.Id</span>
+        </nav>
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="#" class="brand-link">
+                <img src="https://i.postimg.cc/766T2cwr/sarajevo.png" style="height:50px;margin-left:10px;" />
+                <span class="brand-text font-weight-light">eBordo</span>
+            </a>
+            <div class="sidebar">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="/uploads/@k.igrac.slika" class="img-circle elevation-2" alt="User Image" style="height:35px;">
+                    </div>
+                    <div class="info">
+                        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="d-block"><span style="font-size:18px;">@k.imePrezime</span></a>
+                    </div>
+                </div>
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column nav-flat nav-legacy nav-child-indent" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-user nav-icon"></i>
+                                <p>
+                                    Profil
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="nav-link">
+                                        <i class="fas fa-pen nav-icon"></i>
+                                        <p>Izmjena profila</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-chart-pie nav-icon"></i>
+                                <p>
+                                    Statistički podaci
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Utakmica/getIgracUtakmice?igracID=@k.igracID" class="nav-link">
+                                        <i class="far fa-futbol nav-icon"></i>
+                                        <p>Odigrane utakmice</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Igrac/statistika" class="nav-link">
+                                        <i class="fas fa-chart-line nav-icon"></i>
+                                        <p>Statistika igrača</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-futbol nav-icon"></i>
+                                <p>
+                                    Utakmice
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Utakmica/Prikaz" class="nav-link">
+                                        <i class="fas fa-calendar-alt nav-icon"></i>
+                                        <p>Raspored utakmica</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Izvještaj/Prikaz" class="nav-link">
+                                        <i class="fas fa-check nav-icon"></i>
+                                        <p>Odigrane utakmice</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="#" class="nav-link">
+                                <i class="fas fa-running nav-icon"></i>
+                                <p>
+                                    Trening
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Trening/Index" class="nav-link">
+                                        <i class="fas fa-calendar-alt nav-icon"></i>
+                                        <p>Raspored treninga</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="/Događaj/Kalendar" class="nav-link">
+                                <i class="fas fa-calendar-alt nav-icon"></i>
+                                <p>
+                                    Kalendar
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="/Zahtjev/Index" class="nav-link">
+                                <i class="fas fa-poll-h nav-icon"></i>
+                                <p>
+                                    Pošalji zahtjev <span id="brojZahtjeva" style="margin-left:60px;display:inherit;" class="badge badge-warning"></span>
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a onclick="otvoriModal()" href="#" class="nav-link">
+                                <i class="fas fa-envelope nav-icon"></i>
+                                <p>
+                                    Pošalji poruku
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="mailto:ebordoapp@outlook.com" class="nav-link">
+                                <i class="fas fa-info-circle nav-icon"></i>
+                                <p>
+                                    Podrška
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                    <div style="position: fixed; bottom: 0px;">
+                        <img id="bottomPic" src="https://i.postimg.cc/N0PwW1qJ/Picture1.png" style="margin-bottom:10px;height:60px;" />
+                    </div>
+                </nav>
+            </div>
+        </aside>
+        <div class="content-wrapper" style="padding-top:30px;">
+            <section class="content">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+
+            </section>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark">
+        </aside>
+    </div>
+    <script src="/AdminLTE/plugins/jquery/jquery.min.js"></script>
+    <script src="/AdminLTE/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <script src="/AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/AdminLTE/plugins/chart.js/Chart.min.js"></script>
+    <script src="/AdminLTE/plugins/sparklines/sparkline.js"></script>
+    <script src="/AdminLTE/plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="/AdminLTE/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <script src="/AdminLTE/plugins/jquery-knob/jquery.knob.min.js"></script>
+    <script src="/AdminLTE/plugins/moment/moment.min.js"></script>
+    <script src="/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="/AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="/AdminLTE/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="/AdminLTE/dist/js/adminlte.js"></script>
+    <script src="/AdminLTE/dist/js/demo.js"></script>
+    <script src="/AdminLTE/dist/js/pages/dashboard.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/signalR.js" asp-append-version="true"></script>
+    <script src="https://wrd.app.fit.ba/2018-19/fit-messagebox.js"></script>
+    @RenderSection("Scripts", required: false)
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.css" rel="stylesheet" />
+    <script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
+
+<div id="ajaxDiv"></div>
+<div id="otvoriModalDiv"></div>
+<script>
+    function otvoriModal() {
+        $(document).ready(function () {
+            var url = "/Poruka/posaljiPoruku";
+            $.get(url, function (d) {
+                $("#otvoriModalDiv").html(d);
+                $("#otvoriModalDiv").find('.modal').modal('show');
+            });
+        });
+    }
+    var korisnikID = document.getElementById("korisnikID").innerText;
+    $(document).ready(function () {
+        getBrojNotifikacija(korisnikID);
+        getBrojPoruka(korisnikID);
+        getBrojZahtjeva(korisnikID);
+    });
+    function showMePoruka() {
+        var e = document.getElementById("divPoruke");
+        if (e.style.display == "block") {
+            e.style.display = "none";
+        } else {
+            e.style.display = "block";
+            document.getElementById("divNotifikacije").style.display = "none";
+        }
+        ucitajPoruke(korisnikID);
+        getBrojPoruka(korisnikID);
+    }
+    function ucitajPoruke(korisnikID) {
+        var url = "/Notifikacija/Prikaz?korisnikID=" + korisnikID + "&poruka=true";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                $("#divPoruke").html(data);
+            }
+        });
+    }
+    function getBrojPoruka(korisnikID) {
+        var url = "/Notifikacija/getBrojNotifikacija?korisnikID=" + korisnikID + "&tip=true";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                if (data == 0) {
+                    document.getElementById("brojPoruka").style.display = "none";
+                    document.getElementById("poruke").style.top = "0px";
+
+                }
+                else {
+                    document.getElementById("brojPoruka").innerHTML = data;
+                    document.getElementById("poruke").style.top = "-15px";
+                }
+            }
+        });
+    }
+    function showMe() {
+        var e = document.getElementById("divNotifikacije");
+        if (e.style.display == "block") {
+            e.style.display = "none";
+        } else {
+            e.style.display = "block";
+            document.getElementById("divPoruke").style.display = "none";
+        }
+        ucitajNotifikacije(korisnikID);
+        getBrojNotifikacija(korisnikID);
+    }
+    function ucitajNotifikacije(korisnikID) {
+        var url = "/Notifikacija/Prikaz?korisnikID=" + korisnikID + "&poruka=false";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                $("#divNotifikacije").html(data);
+            }
+        });
+    }
+    function getBrojZahtjeva(korisnikID) {
+        var url = "/Zahtjev/getBrojZahtjeva?korisnikID=" + korisnikID;
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                if (data == 0) {
+                    document.getElementById("brojZahtjeva").style.display = "none";
+
+                }
+                else {
+                    document.getElementById("brojZahtjeva").style.display = "inherit";
+                    document.getElementById("brojZahtjeva").innerHTML = data;
+                }
+            }
+        });
+    }
+    function getBrojNotifikacija(korisnikID) {
+        var url = "/Notifikacija/getBrojNotifikacija?korisnikID=" + korisnikID + "&poruka=false";
+
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                if (data == 0) {
+                    document.getElementById("brojNotifikacija").style.display = "none";
+                    document.getElementById("notifications").style.top = "0px";
+
+                }
+                else {
+                    document.getElementById("brojNotifikacija").innerHTML = data;
+                    document.getElementById("notifications").style.top = "-15px";
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,267 @@
+﻿@using eBordo.ViewModels.Account
+@model LicniPodaciVM
+
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<style>
+    #headerKosevo {
+        background: url('https://cdn.oslobodjenje.ba/images/slike/sport1_import/192343/215928.jpg');
+        background-position: center;
+        background-size: 100%;
+    }
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+    #boja{
+        margin-bottom:10px;
+    }
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+    #statistikaLogo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+        height: 30px;
+    }
+
+    .avatar1 {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    #kolonaSredina {
+        text-align: center;
+    }
+
+    #podatakSpan {
+        color: maroon;
+        font-weight: bold;
+    }
+
+    #kontaktPodaci {
+        height: 25px;
+    }
+
+    #podaci1 {
+        margin-left: 5px;
+    }
+
+    .fa {
+    }
+
+    #boja1 {
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-size: 120px;
+    }
+
+    .spanStatistikaShow {
+        font-size: 40px;
+        color: maroon;
+    }
+    #centerImage {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 120px;
+        height: 120px;
+        margin-bottom: 15px;
+        vertical-align: middle;
+        border-radius: 50%;
+    }
+</style>
+
+<div class="card card-widget widget-user">
+    <!-- Add the bg color to the header using any of the bg-* classes -->
+    <div id="headerKosevo" class="widget-user-header">
+    </div>
+    <div class="widget-user-image justify-content-md-center" >
+        <img id="centerImage" src="~/uploads/@Model.slika" class="class=" img-circle img-fluid" />
+    </div>
+    <div class="card-footer">
+        <div class="row" style="margin-top:30px;">
+            <div class="col">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-4" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/Y0jyHPqy/clipart1345327.png" />
+                            <b>Državljanstvo</b>
+                        </div>
+                        <div class="col" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/4ybnXWLV/pngegg-1.png" />
+                            <b>Mjesto rođenja</b>
+                        </div>
+                        <div class="col" id="kolonaSredina">
+                            <img id="statistikaLogo" src="https://i.postimg.cc/q7zt2XqH/favpng-calendar-date.png" />
+                            <b>Datum rođenja</b>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                <img class="mojaKlasa" src="~/uploads/@Model.zastava" />
+                                @Model.drzavljanstvo
+                            </span>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                <img class="mojaKlasa" src="~/uploads/@Model.zastavaZaGrad" />
+                                @Model.gradRodjenja
+                            </span>
+                        </div>
+                        <div class="col d-flex justify-content-center">
+                            <span id="podatakSpan">
+                                @Model.datumRodjenja.ToString("dd.MM.yyyy") <br />
+                            </span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <img id="statistikaLogo" src="https://i.postimg.cc/KYZfbW0r/16277906831582823580-128.png" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <h5 style="color:maroon;font-weight:bold;">Kontakt podaci</h5>
+                                </div>
+                            </div>
+                            <hr style="margin-top:0px;" />
+                            <i class="fa fa-map-marker" aria-hidden="true"></i><b><span id="podaci1">Adresa prebivališta: </span></b><span id="podatakSpan">@Model.adresaPrebivalista</span>  <br />
+                            <i class="fa fa-phone" aria-hidden="true"></i><b><span id="podaci1">Telefon: </span></b><span id="podatakSpan"> @Model.telefon</span>  <br />
+                            <i class="fas fa-envelope" aria-hidden="true"></i><b><span id="podaci1">Mail: </span></b><span id="podatakSpan"> @Model.emailAdresa</span>  <br />
+                            <i class="fa fa-user" aria-hidden="true"></i><b><span id="podaci1">Username: </span></b><span id="podatakSpan"> @Model.username</span>  <br />
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <img id="statistikaLogo" src="https://i.postimg.cc/xTDF76Vg/Contract-Icon-1.png" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <h5 style="color:maroon;font-weight:bold;">Podaci o ugovoru</h5>
+                                </div>
+                            </div>
+                            <hr style="margin-top:0px;" />
+                            <i class="fa fa-calendar" aria-hidden="true"></i><b><span id="podaci1">Datum početka: </span></b><span id="podatakSpan">@Model.datumPocetka</span>  <br />
+                            <i class="fa fa-calendar" aria-hidden="true"></i><b><span id="podaci1">Datum završetka: </span></b><span id="podatakSpan"> @Model.datumZavrsetka</span>  <br />
+                            <i class="fa fa-money-bill-wave" aria-hidden="true"></i><b><span id="podaci1">Iznos plate: </span></b><span id="podatakSpan"> @Model.iznosPlate €</span>  <br />
+                            <i class="fa fa-sticky-note" aria-hidden="true"></i><b><span id="podaci1">Napomene: </span></b><span id="podatakSpan"> @Model.napomene</span>  <br />
+                        </div>
+                        <hr style="width:97%;" />
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <img id="statistikaLogo" src="https://i.postimg.cc/WbSvh8Xh/Pin-Clipart-com-stadium-clipart-1890422.png" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <h5 style="color:maroon;font-weight:bold;">Podaci o igraču</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <hr style="margin-top:0px;" />
+                                    <i class="fa fa-check" aria-hidden="true"></i><b><span id="podaci1">Status: </span></b>
+                                    @if (Model.statusIgraca == Data.EntityModels.Status.Aktivan)
+                                    {
+                                        <span id="boja" class="status text-success">&bull;</span>
+                                    }
+                                    else
+                                    {
+                                        <span id="boja" class="status text-danger">&bull;</span>
+                                    }
+                                    <span id="podatakSpan">@Model.statusIgraca</span>  <br />
+                                    <i class="fa fa-hashtag" aria-hidden="true"></i><b><span id="podaci1">Godine: </span></b><span id="podatakSpan">@Model.godine</span>  <br />
+                                    <i class="fa fa-calendar" aria-hidden="true"></i><b><span id="podaci1">Datum pristupa klubu: </span></b><span id="podatakSpan">@Model.datumPristupaKlubu.ToString("dd.MM.yyyy")</span>  <br />
+                                    <i class="fa fa-history" aria-hidden="true"></i><b><span id="podaci1">Dosadašnji klubovi: </span></b><span id="podatakSpan"> @Model.dosadasnjiKlubovi</span>  <br />
+                                    <i class="fas fa-money-bill-wave" aria-hidden="true"></i><b><span id="podaci1">Tr. vrijednost: </span></b><span id="podatakSpan"> @Model.trzisnaVrijednost €</span>  <br />
+                                    <i class="fa fa-flag" aria-hidden="true"></i><b><span id="podaci1">Reprezentativac: </span></b>
+                                    @if (Model.reprezentativac)
+                                    {
+                                        <span id="boja" class="status text-success">&bull;</span>
+                                        <span>DA</span><br />
+                                    }
+                                    else
+                                    {
+                                        <span id="boja" class="status text-danger">&bull;</span>
+                                        <span>NE</span><br />
+                                    }
+                                </div>
+                                <div class="col">
+                                    <hr style="margin-top:0px;" />
+                                    <i class="fa fa-link" aria-hidden="true"></i><b><span id="podaci1">Transfermarkt: </span></b><a href="@Model.transferMarktAcc" id="podatakSpan">@Model.ime @Model.prezime</a>  <br />
+                                    <i class="fa fa-question" aria-hidden="true"></i><b><span id="podaci1">Bolja noga: </span></b><span id="podatakSpan">@Model.boljaNoga</span>  <br />
+                                    <i class="fas fa-star-half-alt" aria-hidden="true"></i><b><span id="podaci1">Pozicija: </span></b>
+                                    @if (Model.pozicija == "GOLMAN")
+                                    {
+                                        <span id="boja" class="status text-dark">&bull;</span>
+                                    }
+                                    @if (Model.pozicija == "ODBRANA")
+                                    {
+                                        <span id="boja" class="status text-warning">&bull;</span>
+                                    }
+                                    @if (Model.pozicija == "VEZNJAK")
+                                    {
+                                        <span id="boja" class="status text-danger">&bull;</span>
+                                    }
+                                    @if (Model.pozicija == "KRILO")
+                                    {
+                                        <span id="boja" class="status text-success">&bull;</span>
+                                    }
+                                    @if (Model.pozicija == "NAPADAČ")
+                                    {
+                                        <span id="boja" class="status text-primary">&bull;</span>
+                                    }
+                                    <span id="podatakSpan"> @Model.pozicija</span>  <br />
+                                    <i class="fa fa-hashtag" aria-hidden="true"></i><b><span id="podaci1">Visina: </span></b><span id="podatakSpan"> @Model.visina cm</span>  <br />
+                                    <i class="fa fa-hashtag" aria-hidden="true"></i><b><span id="podaci1">Težina: </span></b><span id="podatakSpan"> @Model.tezina kg</span>  <br />
+                                    <i class="fa fa-history" aria-hidden="true"></i><b><span id="podaci1">Dosadašnji klubovi: </span></b><span id="podatakSpan"> @Model.dosadasnjiKlubovi</span>  <br />
+                                </div>
+                            </div>
+                        </div>
+                        <hr style="width:97%;" />
+                    </div>
+                </div>
+            </div>
+            <!--<div class="col-sm-4 border-right">
+                <div class="description-block">
+                    <h5 class="description-header">3,200</h5>
+                    <span class="description-text">SALES</span>
+                </div>-->
+                <!-- /.description-block -->
+            <!--</div>-->
+            <!-- /.col -->
+            <!--<div class="col-sm-4 border-right">
+                <div class="description-block">
+                    <h5 class="description-header">13,000</h5>
+                    <span class="description-text">FOLLOWERS</span>
+                </div>-->
+                <!-- /.description-block -->
+            <!--</div>-->
+            <!-- /.col -->
+            <!--<div class="col-sm-4">
+                <div class="description-block">
+                    <h5 class="description-header">35</h5>
+                    <span class="description-text">PRODUCTS</span>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>

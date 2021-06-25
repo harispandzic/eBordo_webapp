@@ -1,0 +1,129 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    ViewData["Title"] = "Trening";
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="~/css/Prikaz.css">
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterIkona {
+        margin-right: 15px;
+    }
+
+    #grb {
+        height: 40px;
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    #satnicaTH {
+        width: 82px;
+    }
+
+    #utakmicaTH {
+        width: 370px;
+        text-align: center;
+    }
+
+    #takmicenjeTH {
+        width: 276px;
+    }
+
+    #q {
+        width: 130px;
+    }
+
+    #filterIkona {
+        margin-right: 5px;
+    }
+</style>
+
+<body onload="notifikacija()">
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.css" rel="stylesheet" />
+    <script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
+
+    <div id="moj" class="container-xl">
+        <div class="table-responsive-sm">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Home">Početna</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Raspored treninga</li>
+                </ol>
+            </nav>
+            <div class="table-wrapper">
+                <div id="headerDiv" class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Raspored <b>treninga</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @if (k.isTrener)
+                        {
+                            <div id="dodajUrediTrening"></div>
+                        }
+                    </div>
+                </div>
+                <div class="row" style="margin-top:20px;">
+                    <div class="col">
+                        <div id="prikazTreninga"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    $(document).ready(function () {
+        ucitajUrediDodaj();
+        ucitajTreninge();
+    });
+    function ucitajTreninge() {
+        $(document).ready(function () {
+            var url = "/Trening/Prikaz";
+            $.get(url, function (d) {
+                $("#prikazTreninga").html(d);
+            });
+        });
+    }
+    function ucitajUrediDodaj() {
+        $(document).ready(function () {
+            var url = "/Trening/dodajTrening";
+            $.get(url, function (d) {
+                $("#dodajUrediTrening").html(d);
+            });
+        });
+    }
+</script>

@@ -1,0 +1,288 @@
+﻿@using eBordo.ViewModels.Igrac
+@using eBordo.Helper
+@using Data.EntityModels
+@model IgracPrikaziVM
+@{
+    ViewData["Title"] = "Igrači";
+    int brojac = 1;
+    string poruka = (string)TempData["porukaInfo"];
+    string konfMail = (string)TempData["mailInfo"];
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+}
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="~/css/Prikaz.css">
+<script src="~/js/IgracJS.js"></script>
+
+<style>
+    .status {
+        font-size: 30px;
+        margin: 2px 2px 0 0;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 10px;
+    }
+
+    #headerDiv {
+        background: url('https://i.postimg.cc/26N7fvWv/Header.png');
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    .mojaKlasa {
+        width: 30px;
+        height: 20px;
+    }
+
+    #filterPozicija {
+        margin-right: 15px;
+    }
+
+    #drzavljanstvoTH {
+        width: 206px;
+    }
+
+    #datumTH {
+        width: 137px;
+    }
+
+    #gradTH {
+        width: 121px;
+    }
+
+    #ocjenaTH {
+        width: 97px;
+    }
+
+    #pozicijaTH {
+        width: 125px;
+    }
+
+    td {
+        color: black;
+    }
+
+    #boja {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+<body onload="notifikacija('@poruka','@konfMail')">
+    <link href="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.css" rel="stylesheet" />
+    <script src="https://res.cloudinary.com/dxfq3iotg/raw/upload/v1557232134/toasty.js"></script>
+    <div id="moj" class="container-xl">
+        <div class="table-responsive-sm">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/Home">Početna</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Igrači</li>
+                </ol>
+            </nav>
+            <div class="table-wrapper">
+                <div id="headerDiv" class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h2>Upravljanje <b>igračima</b></h2>
+                        </div>
+                        <div class="col-sm-6">
+                            @if (k.isAdmin)
+                            {
+                                <a href="#" onclick="dodajIgraca()" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Dodaj igrača</span></a>
+                            }
+                            @*<a href="#" onclick="obrisiIgracaModal(0,@Model.igraci.Count())" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Obriši sve</span></a>*@
+                            <a onclick="generisiReport()" class="btn btn-warning"><i style="color:black" class="material-icons">get_app</i> <span style="color:black">Download PDF</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-filter">
+                    <div class="row">
+                        <div class="col-sm-1">
+                            <a id="refreshDiv" style="background-color:#510520" onclick="refreshIgrace()" href="#" class="btn btn-default"><i class="material-icons">&#xE863;</i></a>
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="filter-group">
+                                <form>
+                                    <label>Igrač</label>
+                                    <input id="q" placeholder="Search..." type="text" class="form-control" value="@Model.q" name="q">
+                                    <button type="submit" style="background-color:#510520" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                </form>
+                            </div>
+                            <div id="filterIkona" class="filter-group">
+                                <label>Država</label>
+                                <select id="filterDrzava" onchange="filterDrzava()" class="form-control" asp-items="@Model.drzave">
+                                    @if (Model.nazivDrzave == null)
+                                    {
+                                        <option>Filter...</option>
+                                    }
+                                    else
+                                    {
+                                        <option style="color:green">@Model.nazivDrzave</option>
+                                    }
+                                </select>
+                            </div>
+                            <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                            <div id="filterIkona" class="filter-group">
+                                <label>Pozicija</label>
+                                <select id="filterPozicija" onchange="filterPozicija()" class="form-control" asp-items="@Model.pozicije">
+                                    @if (Model.nazivPozicije == null)
+                                    {
+                                        <option>Filter...</option>
+                                    }
+                                    else
+                                    {
+                                        <option style="color:green">@Model.nazivPozicije</option>
+                                    }
+                                </select>
+                            </div>
+                            <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                            <div id="filterIkona" class="filter-group" style="margin-right:10px;">
+                                <label>Stauts</label>
+                                <select id="filterStatus" onchange="filterStatus()" class="form-control" asp-items="@Model.statusi">
+                                    @if (Model.statusIgraca == null)
+                                    {
+                                        <option>Filter...</option>
+                                    }
+                                    else
+                                    {
+                                        <option style="color:green">@Model.statusIgraca</option>
+                                    }
+                                </select>
+                            </div>
+                            <span class="filter-icon"><i class="fa fa-filter"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#Dres</th>
+                            <th>Ime i prezime</th>
+                            <th id="datumTH">Datum rođenja</th>
+                            <th id="drzavljanstvoTH">Državljanstvo</th>
+                            <th id="gradTH">Grad rođenja</th>
+                            <th id="pozicijaTH">Pozicija</th>
+                            <th>Akcije</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (IgracPrikaziVM.Row i in Model.igraci)
+                        {
+                            <tr>
+                                <td>#<b style="color:maroon;">@i.brojDresa</b></td>
+                                <td>
+                                    <img src="~/uploads/@i.slikaIgraca" class="avatar" alt="Avatar">
+                                    @i.ime @i.prezime
+                                </td>
+                                <td>@i.datumRodjenja</td>
+                                <td id="drzavljanstvoTH">
+                                    <img src="~/uploads/@i.drzavaSlika" class="mojaKlasa" alt="Avatar">
+                                    @i.drzavljanstvo
+                                </td>
+                                <td>
+                                    <img src="~/uploads/@i.gradRodjenjaZastava" class="mojaKlasa" alt="Avatar">
+                                    @i.gradRodjenja
+                                </td>
+                                <td id="pozicijaTH">
+                                    @if (i.pozicija == "GOLMAN")
+                                    {
+                                        <span id="boja" class="status text-dark">&bull;</span>
+                                        <span class="badge badge-dark">@i.pozicija</span>
+                                    }
+                                    @if (i.pozicija == "ODBRANA")
+                                    {
+                                        <span id="boja" class="status text-warning">&bull;</span>
+                                        <span class="badge badge-warning">@i.pozicija</span>
+                                    }
+                                    @if (i.pozicija == "VEZNJAK")
+                                    {
+                                        <span id="boja" class="status text-danger">&bull;</span>
+                                        <span class="badge badge-danger">@i.pozicija</span>
+                                    }
+                                    @if (i.pozicija == "KRILO")
+                                    {
+                                        <span id="boja" class="status text-success">&bull;</span>
+                                        <span class="badge badge-success">@i.pozicija</span>
+                                    }
+                                    @if (i.pozicija == "NAPADAČ")
+                                    {
+                                        <span id="boja" class="status text-primary">&bull;</span>
+                                        <span class="badge badge-primary">@i.pozicija</span>
+                                    }
+                                </td>
+                                <td id="ikonice">
+                                    <a href="#" onclick="prikaziDetaljeIgraca(@i.igracID)" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                    @if (k.isAdmin)
+                                    {
+                                        <a href="#" onclick="urediIgrac(@i.igracID)" class="edit" title="Uredi" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                        @if (i.statusIgraca == Data.EntityModels.Status.Aktivan)
+                                        {
+                                            <a href="#" onclick="obrisiIgracaModal(@i.igracID,@Model.igraci.Count())" class="delete" title="Archive" data-toggle="tooltip"><i class="material-icons">archive</i></a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#" onclick="odarhivirajIgraca(@i.igracID)" style="color:#28A745" title="Unarchive" data-toggle="tooltip"><i class="material-icons">unarchive</i></a>
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            brojac++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<div id="ajaxDiv"></div>
+
+<script>
+    function odarhivirajIgraca(igracID) {
+        window.location.href = "/Igrac/VratiIgraca?igracID=" + igracID;
+    }
+    function filterStatus() {
+        $(document).ready(function () {
+            var e = document.getElementById("filterStatus");
+            var result = e.options[e.selectedIndex].text;
+            window.location.href = "/Igrac/Prikaz?statusIgraca=" + result;
+        });
+    }
+    function urediIgrac(igracID) {
+        $(document).ready(function () {
+            var url = "/Igrac/UrediIgraca?igracID=" + igracID;
+            $.get(url, function (d) {
+                $("#ajaxDiv").html(d);
+                $("#ajaxDiv").find('.modal').modal('show');
+            });
+        });
+    }
+    function generisiReport() {
+        var url = "/Report/getAll";
+
+        notifikacija("Preuzimanje počinje...");
+
+        $.ajax({
+            url: url,
+            contentType: 'application/pdf; charset=utf-8',
+            datatype: 'file',
+            type: "GET",
+            success: function () {
+                window.location.href = "/Report/getAll";
+                setTimeout(function () {
+                    notifikacija("PDF dokument uspješno preuzet!");
+                }, 6000)
+            },
+            error: function () {
+                notifikacija("Greška prilikom download-a!");
+            }
+        });
+    }
+</script>

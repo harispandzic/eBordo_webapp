@@ -1,0 +1,87 @@
+﻿@using eBordo.Helper
+@using Data.EntityModels
+@{
+    //if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
+    //{
+    //    Layout = (string)parentLayout;
+    //}
+    //else
+    //{
+    //    Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+    //}
+
+    Korisnik k = Autentifikacija.LogiraniKorisnik(Context);
+    if(k == null)
+    {
+        Layout = "_Layout";
+    }
+    else
+    {
+        if (k.isIgrac)
+        {
+            Layout = "_Layout_igrac";
+        }
+        if (k.isAdmin)
+        {
+            Layout = "_Layout_admin";
+        }
+        if (k.isTrener)
+        {
+            Layout = "_Layout_trener";
+        }
+    }
+}
+
+<style>
+    #centerImage {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 150px;
+        height: 150px;
+        margin-bottom: 15px;
+        vertical-align: middle;
+        border-radius: 50%;
+    }
+</style>
+
+<h2 style="margin-left:20px;margin-bottom:10px;">Upravljanje korisničkim računom</h2>
+
+<div style="margin-left:20px;">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row justify-content-md-center">
+                <div class="col justify-content-md-center" style="text-align: center;">
+                    @if (k.isIgrac)
+                    {
+                        <img id="centerImage" src="~/uploads/@k.igrac.slika" class="class=" img-circle img-fluid" />
+                        <h4>@k.imePrezime</h4>
+
+                    }
+                    @if (k.isTrener)
+                    {
+                        <img id="centerImage" src="~/uploads/@k.trener.slika" class="class=" img-circle img-fluid" />
+                        <h4>@k.imePrezime</h4>
+
+                    }
+                    @if (k.isAdmin)
+                    {
+                        <img id="centerImage" src="https://i.postimg.cc/W3shQgvm/clipart3191274.png" class="class=" img-circle img-fluid" />
+                        <h4>Administrator</h4>
+
+                    }
+                </div>
+            </div>
+            <partial name="_ManageNav" />
+        </div>
+        <div class="col-md-9">
+            @RenderBody()
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
+
+

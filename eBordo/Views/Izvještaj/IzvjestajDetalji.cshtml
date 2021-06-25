@@ -1,0 +1,461 @@
+﻿@model eBordo.ViewModels.Izvještaj.IzvjestajDetaljiVM
+
+@{ 
+    int brojac = 1;
+    int broj = Model.izmjene.Count() + 11;
+}
+
+<style>
+    #grbKluba {
+        height: 45px;
+    }
+
+    #logoTakmicenje {
+        height: 25px;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    #nazivKlubova {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    #goloviKlubova {
+        font-size: 30px;
+        font-weight: bold;
+        margin-top:5px;
+    }
+
+    .avatar4 {
+        vertical-align: middle;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+
+    #ikonice a {
+        margin: 0px;
+    }
+
+    #ocjeneTD {
+        text-align: center;
+    }
+    #opisCol{
+        text-align:center;
+    }
+    .ocjenaVrijednost {
+        /*font-size: 20px;*/
+    }
+
+    .progress {
+        background-color: #E9ECEF;
+    }
+    #statistikaLogo {
+        height: 25px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: auto;
+    }
+    #kratkaStatistikaSlika{
+        margin-right:5px;
+        margin-bottom:5px;
+    }
+    #broj {
+        color: maroon;
+    }
+    #goloviSum, #asistencijeSum, #zutiKartoniSum, #crveniKartoniSum, #prosjecnaOcjenaSum {
+        color: maroon;
+    }
+    iframe{
+        width:100%;
+        height:360px;
+    }
+    #bedz{
+        position:absolute;
+        left:315px;
+        bottom:25px;
+    }
+</style>
+
+<div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Izvještaj sa utakmice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col align-middle">
+                                <span id="nazivKlubova">@Model.domacin</span> <img id="grbKluba" src="~/uploads/@Model.domacinGrb" /> <img id="logoTakmicenje" src="/uploads/@Model.slikaVrstaTakmicenja" /><img id="grb" src="~/uploads/@Model.gostGrb" /><span id="nazivKlubova">@Model.gost</span>
+                                <span style="margin-left:21px;" id="goloviKlubova">@Model.goloviDomacih</span>
+                                @if (Model.rezultat == Data.EntityModels.Rezultat.Pobjeda)
+                                {
+                                    <span class="status text-success" style="margin-bottom:20px;">&bull;</span>
+                                    <span id="goloviKlubova">@Model.goloviGostiju</span><br />
+                                    <span id="bedz" class="badge badge-success">Pobjeda</span>
+                                }
+                                @if (Model.rezultat == Data.EntityModels.Rezultat.Poraz)
+                                {
+                                    <span class="status text-danger" style="margin-bottom:20px";>&bull;</span>
+                                    <span id="goloviKlubova">@Model.goloviGostiju</span>
+                                    <span id="bedz" class="badge badge-danger">Poraz</span>
+                                }
+                                @if (Model.rezultat == Data.EntityModels.Rezultat.Nerješeno)
+                                {
+                                    <span class="status text-secondary" style="margin-bottom:20px;">&bull;</span>
+                                    <span id="goloviKlubova">@Model.goloviGostiju</span>
+                                    <span id="bedz" class="badge badge-secondary">Nerješeno</span>
+                                }
+                                <hr />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <i class="fa fa-address-card-o" aria-hidden="true"></i><b><span id="podaci1">Igrač utakmice:</span></b><img src="~/uploads/@Model.slikaIgrac" class="avatar4" alt="Avatar"><span id="podatakSpan">@Model.igracUtakmice</span><br />
+                                <i class="fa fa-star" aria-hidden="true"></i><b><span id="podaci1">Trener:</span></b><img src="~/uploads/@Model.slikaIgrac" class="avatar4" alt="Avatar"><span id="podatakSpan">@Model.trener</span><br />
+                                <i class="fa fa-sun-o" aria-hidden="true"></i><b><span id="podaci1">Vrijeme:</span></b>
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Sunčano)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/sunce.png" /><span id="podatakSpan">Sunčano</span><br />
+                                }
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Kiša)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/kiša.png" /><span id="podatakSpan">Kiša</span><br />
+                                }
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Oblačno)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/oblačno.png" /><span id="podatakSpan">Oblačno</span><br />
+                                }
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Snijeg)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/snijeg.png" /><span id="podatakSpan">Snijeg</span><br />
+                                }
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Promjenjivo)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/Promjenjivo.png" /><span id="podatakSpan">Promjenjivo</span><br />
+                                }
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Čisto_Dan)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/čistoDan.png" /><span id="podatakSpan">Čisto (dan) </span><br />
+                                }
+                                @if (Model.vrijeme == Data.EntityModels.Vrijeme.Čisto_Noć)
+                                {
+                                    <img id="vrijeme" src="~/Vrijeme/čistoNoć.png" /><span id="podatakSpan">Čisto (noć)</span><br />
+                                }
+                                <i class="fa fa-users" aria-hidden="true"></i><b><span id="podaci1">Broj gledalaca:</span></b><span id="podatakSpan">@Model.brojGledalaca</span><br />
+                                <i class="fa fa-user-o" aria-hidden="true"></i><b><span id="podaci1">Delegat utakmice:</span></b><span id="podatakSpan">@Model.delegat</span><br />
+                                <i class="fa fa-calendar" aria-hidden="true"></i><b><span id="podaci1">Datum kreiranja:</span></b><span id="podatakSpan">@Model.datumKreiranja</span><br />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <img id="previewSlika" style="width:100%;height: 240px;" src="~/uploads/@Model.slika" />
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <b><span>Statistika sa utakmice: </span></b><br /><br />
+                        <img id="kratkaStatistikaSlika" src="https://tmsi.akamaized.net/icons/ball_blau.svg" height="25px" /><b>Golovi: </b><span id="goloviSum"></span><br />
+                        <img id="kratkaStatistikaSlika" src="https://tmsi.akamaized.net/icons/ball_gruen.svg" height="25px" /><b>Asistencije: </b><span id="asistencijeSum"></span><br />
+                        <img id="kratkaStatistikaSlika" src="https://tmsi.akamaized.net/icons/gelbe_karte.svg" height="25px" /><b>Žuti kartoni: </b><span id="zutiKartoniSum"></span><br />
+                        <img id="kratkaStatistikaSlika" src="https://tmsi.akamaized.net/icons/rote_karte.svg" height="25px" /><b>Crveni kartoni: </b><span id="crveniKartoniSum"></span><br />
+                        <img id="kratkaStatistikaSlika" src="https://i.postimg.cc/xTc7HKQM/bar-chart-676.png" height="25px" /><b>Prosječna ocjena: </b><b id="prosjecnaOcjenaSum"></b><br />
+                    </div>
+                    <div class="col">
+                        <b><span>Zapisnik: </span></b>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+                            </div>
+                            <textarea readonly asp-for="zapisnik" class="form-control" id="exampleFormControlTextarea4" rows="9"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <h5 style="color:maroon">Video izvještaj</h5>
+                    </div>
+                    <div class="col" id="DownUp" style="margin-bottom:25px;">
+                        <button id="btnCollapseVideoDown" type="button" class="btn btn-outline-warning btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_down</span></button>
+                        <button id="btnCollapseVideoUp" type="button" class="btn btn-outline-danger btn-sm"><span style="float:right;" id="spanAcc" class="material-icons">keyboard_arrow_up</span></button>
+                    </div>
+                </div>
+                <div class="collapse" id="videoCollapse">
+                    <div class="row" style="margin-bottom:5px;">
+                        <div class="col">
+                            <iframe width="560" height="315" src="https://www.youtube.com/embed/@Model.youtubeVideoID" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h5 style="color:maroon">Podaci o izmjenama</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        @if (Model.izmjene.Count() == 3)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                <b>Sve izmjene su evidentirane!</b>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning" role="alert">
+                                Evidentirano izmjena: <b>@Model.izmjene.Count od 3</b>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th><img src="https://i.postimg.cc/v81YF8XP/600px-Green-Arrow-Down-svg.png" id="statistikaLogo" /></th>
+                            <th><img src="https://i.postimg.cc/m2CTkdvC/600px-Red-Arrow-Down-svg.png" id="statistikaLogo" /></th>
+                            <th><img src="https://i.postimg.cc/wMPqTD1h/reason-png-6.png" id="statistikaLogo" /></th>
+                            <th><img src="https://i.postimg.cc/3wpZ84hs/imgbin-computer-icons-clock-time-png.png" id="statistikaLogo" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Model.izmjene)
+                        {
+                            <tr>
+                                <td>@brojac</td>
+                                <td>
+                                    <img src="~/uploads/@i.slikaOUT" class="avatar" alt="Avatar">
+                                    @i.igracIN <b id="broj">#@i.brojDresaIN</b>
+                                </td>
+                                <td>
+                                    <img src="~/uploads/@i.slikaOUT" class="avatar" alt="Avatar">
+                                    @i.igracOUT <b id="broj">#@i.brojDresaOUT</b>
+                                </td>
+                                <td>@i.razlog</td>
+                                <td>@i.minuta. min </td>
+                            </tr>
+                            brojac++;
+                        }
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col">
+                        <h5 style="color:maroon">Statistički podaci</h5>
+                    </div>
+                </div>
+                @if (Model.nastupi.Count() == broj)
+                {
+                    <div class="alert alert-success" role="alert">
+                        <b>Svi igrači su ocjenjeni!</b>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning" role="alert">
+                        Ocjenjeno igrača: <b>@Model.nastupi.Count od @broj</b>
+                    </div>
+                }
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Igrač</th>
+                            <th align="center">
+                                <img src="https://tmsi.akamaized.net/icons/Spiele.svg" height="30px" />
+                            </th>
+                            <th align="center">
+                                <img src="https://tmsi.akamaized.net/icons/ball_blau.svg" height="25px" />
+                            </th>
+                            <th align="center">
+                                <img src="https://tmsi.akamaized.net/icons/ball_gruen.svg" height="25px" />
+                            </th>
+                            <th align="center">
+                                <img src="https://tmsi.akamaized.net/icons/gelbe_karte.svg" height="25px" />
+                            </th>
+                            <th align="center">
+                                <img src="https://tmsi.akamaized.net/icons/rote_karte.svg" height="25px" />
+                            </th>
+                            <th align="center">
+                                <img src="https://i.postimg.cc/xTc7HKQM/bar-chart-676.png" height="25px" />
+                            </th>
+                            <th align="center" style="width:20px;">
+                                <img src="https://i.postimg.cc/43ChwPpc/Pin-Clipart-com-analysis-clipart-884465.png" height="25px" />
+                            </th>
+                            <th>Detaljna st.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var i in Model.nastupi)
+                        {
+                            <tr>
+                                <td style="color:maroon;font-weight:bold;">#@i.brojDresa</td>
+                                <td class="imePrezime">
+                                    <img src="~/uploads/@i.slikaIgraca" class="avatar" alt="Avatar">
+                                    @i.imePrezime
+                                </td>
+                                <td>@i.minute</td>
+                                <td class="golovi">@i.golovi</td>
+                                <td class="asistencije">@i.asistencije</td>
+                                <td class="zutiKartoni">@i.zutiKartoni</td>
+                                <td class="crveniKartoni">@i.crveniKartoni</td>
+                                <td id="ocjeneTD" style="width:61px;">
+                                    <b class="ocjenaVrijednost glavnaOcjena">@i.ocjena</b>
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="statistikaTabela_progress-bar" style="width:20%"></div>
+                                    </div>
+                                </td>
+                                <td id="ocjeneTD" style="width:61px;">
+                                    <b class="ocjenaVrijednost">@i.prosjecnaOcjena</b>
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="statistikaTabela_progress-bar" style="width:20%"></div>
+                                    </div>
+                                </td>
+                                <td id="ikonice">
+                                    <a href="#" onclick="prikaziOcjene(@i.igracID, @Model.utakmicaID)" class="view" title="View" data-toggle="tooltip"><i class="material-icons">&#xE417;</i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            <div class="row">
+                <div class="col">
+                    <span style="font-weight:bold;margin-right:5px;">Izvještaj popunio:</span><img src="~/uploads/@Model.trenerSlika" class="avatar" alt="Avatar"><span style="color:maroon;font-weight:bold;">@Model.trener</span>
+                    <span style="color:maroon;font-weight:bold;float:right;">@Model.nazivStadiona, @Model.datumKreiranja</span>
+                </div>
+            </div>
+            </div>
+            <div class="modal-footer">
+                @*<button type="button" class="btn btn-warning btn-sm"><span style="float:right;" class="material-icons">get_app</span></button>*@
+                <button type="button" class="btn btn-success btn-sm"><span style="float:right;" data-dismiss="modal" class="material-icons">keyboard_backspace</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ajaxDiv3"></div>
+
+<script>
+    $("#btnCollapseVideoDown").click(function () {
+        $("#videoCollapse").collapse('show');
+    });
+    $("#btnCollapseVideoUp").click(function () {
+        $("#videoCollapse").collapse('hide');
+    });
+    $(document).ready(function () {
+        $("#videoCollapse").collapse('show');
+        var progressBar = document.getElementsByClassName("statistikaTabela_progress-bar");
+        var vrijednosti = document.getElementsByClassName("ocjenaVrijednost");
+        for (var i = 0; i < vrijednosti.length; i++) {
+            var variable = parseFloat(vrijednosti[i].innerText) * 10;
+            var unit = "%";
+            var z = variable + unit;
+            $(progressBar[i]).css("width", z);
+            var vrijednost = parseFloat(vrijednosti[i].innerText);
+            if (vrijednost >= 3 && vrijednost < 8) {
+                vrijednosti[i].style.color = "#FFC107";
+                progressBar[i].style.backgroundColor = "#FFC107";
+                //$(progressBar[i]).addClass("bg-warning");
+            }
+            else if (vrijednost >= 8 && vrijednost <= 10) {
+                vrijednosti[i].style.color = "#28A745";
+                progressBar[i].style.backgroundColor = "#28A745";
+            }
+            else {
+                vrijednosti[i].style.color = "#DC3545";
+                progressBar[i].style.backgroundColor = "#DC3545";
+                //$(progressBar[i]).addClass("bg-danger");
+            }
+        }
+        //-------------------------------------------------------------//
+        getGolovi();
+        getAsistencije();
+        getZutiKartoni();
+        getCrveniKartoni();
+        getProsjecnaOcjena();
+    });
+    function getProsjecnaOcjena() {
+        var rezultat = 0;
+        var brojac = 0;
+        var elementi = document.getElementsByClassName("glavnaOcjena");
+        for (i = 0; i < elementi.length; i++) {
+            if (elementi[i].innerText > 0) {
+                brojac = parseInt(brojac) + 1;
+                rezultat = parseInt(rezultat) + parseInt(elementi[i].innerText);
+            }
+        }
+        document.getElementById("prosjecnaOcjenaSum").innerText = (rezultat / brojac).toFixed(2);
+    }
+    function getCrveniKartoni() {
+        var crveniKartoni = document.getElementsByClassName("crveniKartoni");
+        var imePrezime = document.getElementsByClassName("imePrezime");
+        for (var i = 0; i < crveniKartoni.length; i++) {
+            if (parseInt(crveniKartoni[i].innerText) > 0) {
+                document.getElementById("crveniKartoniSum").innerText += imePrezime[i].innerText;
+            }
+            document.getElementById("crveniKartoniSum").innerText += " ";
+        }
+    }
+    function getZutiKartoni() {
+        var zutiKartoni = document.getElementsByClassName("zutiKartoni");
+        var imePrezime = document.getElementsByClassName("imePrezime");
+        for (var i = 0; i < zutiKartoni.length; i++) {
+            if (parseInt(zutiKartoni[i].innerText) > 0) {
+                if (parseInt(zutiKartoni[i].innerText) > 1) {
+                    document.getElementById("zutiKartoniSum").innerText += imePrezime[i].innerText + "(" + zutiKartoni[i].innerText + "x)";
+                }
+                else {
+                    document.getElementById("zutiKartoniSum").innerText += imePrezime[i].innerText;
+                }
+            }
+            document.getElementById("zutiKartoniSum").innerText += " ";
+        }
+    }
+    function getAsistencije() {
+        var asistencije = document.getElementsByClassName("asistencije");
+        var imePrezime = document.getElementsByClassName("imePrezime");
+        for (var i = 0; i < asistencije.length; i++) {
+            if (parseInt(asistencije[i].innerText) > 0) {
+                if (parseInt(asistencije[i].innerText) > 1) {
+                    document.getElementById("asistencijeSum").innerText += imePrezime[i].innerText + "(" + asistencije[i].innerText + "x)";
+                }
+                else {
+                    document.getElementById("asistencijeSum").innerText += imePrezime[i].innerText;
+                }
+            }
+            document.getElementById("asistencijeSum").innerText += " ";
+        }
+    }
+    function getGolovi() {
+        var golovi = document.getElementsByClassName("golovi");
+        var imePrezime = document.getElementsByClassName("imePrezime");
+        for (var i = 0; i < golovi.length; i++) {
+            if (parseInt(golovi[i].innerText) > 0) {
+                if (parseInt(golovi[i].innerText) > 1) {
+                    document.getElementById("goloviSum").innerText += imePrezime[i].innerText + "(" + golovi[i].innerText + "x)";
+                }
+                else {
+                    document.getElementById("goloviSum").innerText += imePrezime[i].innerText;
+                }
+            }
+            document.getElementById("goloviSum").innerText += " ";
+        }
+    }
+    function prikaziOcjene(igracID, utakmicaID) {
+        $(document).ready(function () {
+            var url = "/Izvještaj/IzvjestajOcjene?igracID=" + igracID + "&utakmicaID=" + utakmicaID;
+            $.get(url, function (d) {
+                $("#ajaxDiv3").html(d);
+                $("#ajaxDiv3").find('.modal').modal('show');
+            });
+        });
+    }
+</script>
